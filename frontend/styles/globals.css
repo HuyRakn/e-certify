@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for E-Certify */
+.credential-card {
+  @apply border border-gray-200 rounded-lg p-6 cursor-pointer hover:shadow-lg transition-shadow;
+}
+
+.credential-card:hover {
+  @apply transform scale-105;
+}
+
+.verification-success {
+  @apply bg-green-50 border border-green-200 rounded-lg p-8;
+}
+
+.verification-error {
+  @apply bg-red-50 border border-red-200 rounded-lg p-8;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-700 disabled:opacity-50;
+}
+
+.btn-success {
+  @apply bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50;
+}
+
+
