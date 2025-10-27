@@ -1,0 +1,17 @@
+[toolchain]
+anchor_version = "0.29.0"
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.devnet]
+program = "A9wy4icR7uQnffj16zLDonoaSt4dhwaMudLo34nfccej"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "admin-keypair.json"

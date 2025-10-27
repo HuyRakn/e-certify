@@ -51,10 +51,17 @@ const StudentWallet: React.FC = () => {
       // Fetch assets from Helius DAS API
       const response = await getAssetsByOwner(publicKey.toString())
       
+      // Check if response has items
+      if (!response || !response.items) {
+        console.log('No assets found for wallet:', publicKey.toString())
+        setCredentials([])
+        return
+      }
+      
       // Filter for APEC University credentials
       const apecCredentials = filterAssetsByIssuer(response.items, APEC_ISSUER_ADDRESS)
 
-      // Parse credential metadata
+      // Parse credential metadata - ONLY REAL DATA
       const credentialList = apecCredentials
         .map(asset => {
           const metadata = parseCredentialMetadata(asset)
@@ -69,79 +76,18 @@ const StudentWallet: React.FC = () => {
             issuer_name: metadata.issuer_name,
             issued_date: metadata.issued_at.split('T')[0],
             uri: asset.content?.json_uri || '',
-            image: '/api/placeholder/300/200',
-            student_name: 'Student Name',
+            image: asset.content?.files?.[0]?.uri || asset.content?.metadata?.image || '/api/placeholder/300/200',
+            student_name: 'Student Name', // Will be fetched from metadata
             student_id: metadata.student_id,
           }
         })
         .filter((cred): cred is Credential => cred !== null)
 
-      // If no real credentials found, show mock data for demo
-      if (credentialList.length === 0) {
-        const mockCredentials: Credential[] = [
-          {
-            id: 'mock-1',
-            name: 'Module Python Programming',
-            type: 'Technical Skill',
-            skill_business: 'N/A',
-            skill_tech: 'Python',
-            issuer_name: 'APEC University',
-            issued_date: '2024-01-15',
-            uri: 'https://arweave.net/example1',
-            image: '/api/placeholder/300/200',
-            student_name: 'Nguyen Van A',
-            student_id: '2024001'
-          },
-          {
-            id: 'mock-2',
-            name: 'Startup Finance Fundamentals',
-            type: 'Business Skill',
-            skill_business: 'Startup Finance',
-            skill_tech: 'N/A',
-            issuer_name: 'APEC University',
-            issued_date: '2024-02-20',
-            uri: 'https://arweave.net/example2',
-            image: '/api/placeholder/300/200',
-            student_name: 'Nguyen Van A',
-            student_id: '2024001'
-          },
-          {
-            id: 'mock-3',
-            name: 'Dual Degree Certificate',
-            type: 'Dual Degree Module',
-            skill_business: 'Entrepreneurship',
-            skill_tech: 'Full Stack Development',
-            issuer_name: 'APEC University',
-            issued_date: '2024-03-10',
-            uri: 'https://arweave.net/example3',
-            image: '/api/placeholder/300/200',
-            student_name: 'Nguyen Van A',
-            student_id: '2024001'
-          }
-        ]
-        setCredentials(mockCredentials)
-      } else {
-        setCredentials(credentialList)
-      }
+      setCredentials(credentialList)
     } catch (error) {
       console.error('Error fetching credentials:', error)
-      // Fallback to mock data on error
-      const mockCredentials: Credential[] = [
-        {
-          id: 'mock-1',
-          name: 'Module Python Programming',
-          type: 'Technical Skill',
-          skill_business: 'N/A',
-          skill_tech: 'Python',
-          issuer_name: 'APEC University',
-          issued_date: '2024-01-15',
-          uri: 'https://arweave.net/example1',
-          image: '/api/placeholder/300/200',
-          student_name: 'Nguyen Van A',
-          student_id: '2024001'
-        }
-      ]
-      setCredentials(mockCredentials)
+      // NO MOCK DATA - show empty state
+      setCredentials([])
     } finally {
       setLoading(false)
     }

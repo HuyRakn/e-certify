@@ -15,7 +15,7 @@ import {
   CreateMerkleTreeData,
   IssueCredentialData
 } from '../utils/ecertify'
-import { batchMintCredentials } from '../utils/bubblegum'
+import { batchMintCredentialsWithHelius } from '../utils/helius-mint'
 import { ClientOnly } from './ClientOnly'
 
 interface IssuerData {
@@ -96,6 +96,11 @@ const AdminDashboard: React.FC = () => {
         issuerData
       )
 
+      // Get recent blockhash and set fee payer
+      const { blockhash } = await connection.getLatestBlockhash()
+      transaction.recentBlockhash = blockhash
+      transaction.feePayer = publicKey
+
       // Sign and send transaction
       const signedTransaction = await signTransaction(transaction)
       const signature = await connection.sendRawTransaction(signedTransaction.serialize())
@@ -141,6 +146,11 @@ const AdminDashboard: React.FC = () => {
         merkleTreePda,
         merkleTreeData
       )
+
+      // Get recent blockhash and set fee payer
+      const { blockhash } = await connection.getLatestBlockhash()
+      transaction.recentBlockhash = blockhash
+      transaction.feePayer = publicKey
 
       // Sign and send transaction
       const signedTransaction = await signTransaction(transaction)
@@ -189,7 +199,7 @@ const AdminDashboard: React.FC = () => {
       const students = lines.slice(1).map(line => {
         const values = line.split(',').map(v => v.trim())
         return {
-          wallet: new PublicKey(values[walletIndex]),
+          wallet: values[walletIndex],
           name: values[nameIndex],
           internalId: values[idIndex]
         }
@@ -202,32 +212,25 @@ const AdminDashboard: React.FC = () => {
       // Get form values
       const credentialName = (document.getElementById('credential-name') as HTMLInputElement)?.value || 'Default Credential'
       const credentialType = (document.getElementById('credential-type') as HTMLSelectElement)?.value || 'Dual_Degree_Module'
-      const selectedBatchId = (document.getElementById('batch-select') as HTMLSelectElement)?.value
       
-      if (!selectedBatchId) {
-        throw new Error('Please select a credential batch')
-      }
-      
-      // Get merkle tree for the selected batch
-      const merkleTree = new PublicKey('11111111111111111111111111111111') // Mock for MVP
-      
-      // Batch mint credentials
-      const signatures = await batchMintCredentials(
-        connection,
-        { publicKey, signTransaction },
+      // MINT REAL CREDENTIALS USING HELIUS API
+      const mintResults = await batchMintCredentialsWithHelius(
         students,
-        credentialName,
-        credentialType,
-        'Startup Finance', // Default business skill
-        'Python', // Default tech skill
-        merkleTree,
-        (completed, total) => {
-          console.log(`Minted ${completed}/${total} credentials`)
-        }
+        publicKey.toString()
       )
       
-      alert(`Successfully minted ${signatures.length} credentials!`)
-      console.log('Minting signatures:', signatures)
+      const successCount = mintResults.filter(r => r.success).length
+      const failCount = mintResults.filter(r => !r.success).length
+      
+      if (successCount > 0) {
+        alert(`Successfully minted ${successCount} credentials!`)
+      }
+      
+      if (failCount > 0) {
+        alert(`Failed to mint ${failCount} credentials. Check console for details.`)
+      }
+      
+      console.log('Mint results:', mintResults)
       
     } catch (error) {
       console.error('Error processing CSV:', error)

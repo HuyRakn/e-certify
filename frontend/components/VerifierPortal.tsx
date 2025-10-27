@@ -45,7 +45,13 @@ const VerifierPortal: React.FC = () => {
     setVerificationResult(null)
 
     try {
-      // Use the new verification utility
+      // Get asset from Helius DAS API
+      const asset = await getAsset(id)
+      
+      // Get proof for verification
+      const proof = await getAssetProof(id)
+      
+      // Verify credential on-chain
       const result = await verifyCredentialOnChain(id, connection)
       
       if (result.isValid && result.credential) {
@@ -62,24 +68,11 @@ const VerifierPortal: React.FC = () => {
     } catch (error) {
       console.error('Verification error:', error)
       
-      // Fallback to mock verification for demo
-      await new Promise(resolve => setTimeout(resolve, 2000)) // Simulate API call
-      
-      const mockResult: VerificationResult = {
-        isValid: true,
-        credential: {
-          id: id,
-          name: 'Module Python Programming',
-          student_name: 'Nguyen Van A',
-          issuer_name: 'APEC University',
-          issued_date: '2024-01-15',
-          type: 'Technical Skill',
-          skill_business: 'N/A',
-          skill_tech: 'Python'
-        }
-      }
-      
-      setVerificationResult(mockResult)
+      // NO MOCK DATA - show error
+      setVerificationResult({
+        isValid: false,
+        error: 'Failed to verify credential. Please try again.'
+      })
     } finally {
       setLoading(false)
     }
@@ -93,15 +86,13 @@ const VerifierPortal: React.FC = () => {
   }
 
   const handleQRScan = () => {
-    // In a real implementation, this would open camera for QR scanning
-    // For MVP, we'll simulate scanning
-    setScannedQR(true)
-    setTimeout(() => {
-      const mockAssetId = 'mock-asset-id-123'
-      setAssetId(mockAssetId)
-      verifyCredential(mockAssetId)
-      setScannedQR(false)
-    }, 2000)
+    // Real QR scanning would require a camera library like 'react-qr-scanner'
+    // For now, prompt user to paste the asset ID from QR code
+    const scannedId = prompt('Please paste the asset ID from the QR code:')
+    if (scannedId) {
+      setAssetId(scannedId)
+      verifyCredential(scannedId)
+    }
   }
 
   return (

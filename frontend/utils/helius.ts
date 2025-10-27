@@ -1,13 +1,12 @@
 import { PublicKey } from '@solana/web3.js';
+import { CONFIG } from './config';
 
 // Helius DAS API configuration
-const HELIUS_API_KEY = process.env.NEXT_PUBLIC_HELIUS_API_KEY || 'demo-key';
-const HELIUS_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'devnet' 
-  ? `https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`
-  : `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+const HELIUS_API_KEY = CONFIG.HELIUS_API_KEY;
+const HELIUS_RPC_URL = CONFIG.RPC_URL;
 
-// DAS API endpoints
-const DAS_API_BASE = process.env.NEXT_PUBLIC_SOLANA_NETWORK === 'devnet'
+// DAS API endpoints - use the provided RPC URL
+const DAS_API_BASE = CONFIG.SOLANA_NETWORK === 'devnet'
   ? 'https://devnet.helius-rpc.com'
   : 'https://mainnet.helius-rpc.com';
 
@@ -84,10 +83,10 @@ export interface HeliusAssetsByOwnerResponse {
   page?: number;
 }
 
-// Helper function to make DAS API calls with fallback
-async function makeDASApiCall<T>(endpoint: string, body: any): Promise<T> {
+// Helper function to make DAS API calls with proper error handling
+async function makeDASApiCall<T>(body: any): Promise<T> {
   try {
-    const response = await fetch(`${DAS_API_BASE}${endpoint}`, {
+    const response = await fetch(HELIUS_RPC_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -96,131 +95,18 @@ async function makeDASApiCall<T>(endpoint: string, body: any): Promise<T> {
     });
 
     if (!response.ok) {
-      throw new Error(`DAS API call failed: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error('DAS API Error:', response.status, errorText);
+      throw new Error(`DAS API call failed: ${response.status} ${response.statusText}`);
     }
 
     return response.json();
   } catch (error) {
-    console.warn('DAS API call failed, using fallback:', error);
-    // Return mock data for MVP
-    return getMockDASResponse<T>(body);
+    console.error('DAS API call error:', error);
+    throw error;
   }
 }
 
-// Mock DAS response for MVP
-function getMockDASResponse<T>(body: any): T {
-  if (body.method === 'getAssetsByOwner') {
-    return {
-      items: [
-        {
-          id: 'mock-asset-1',
-          interface: 'V1_NFT',
-          content: {
-            schema: 'https://schema.metaplex.com/nft1.0.json',
-            json_uri: 'https://arweave.net/mock-metadata-1',
-            metadata: {
-              name: 'Module Python Programming',
-              symbol: 'APEC-TECH',
-              description: 'Technical skill credential from APEC University',
-              attributes: [
-                { trait_type: 'Student_ID_Internal', value: '2024001' },
-                { trait_type: 'Credential_Type', value: 'Technical_Skill' },
-                { trait_type: 'Skill_Tech', value: 'Python' },
-                { trait_type: 'Issuer_Name', value: 'APEC University' },
-                { trait_type: 'Issuer_Address', value: 'ECertifyProgram11111111111111111111111111111' },
-                { trait_type: 'Valid_Until', value: '2025-12-31' },
-              ],
-            },
-          },
-          ownership: {
-            frozen: false,
-            delegated: false,
-            ownership_model: 'single',
-            owner: body.params.ownerAddress,
-          },
-          mutable: false,
-          burnt: false,
-        },
-        {
-          id: 'mock-asset-2',
-          interface: 'V1_NFT',
-          content: {
-            schema: 'https://schema.metaplex.com/nft1.0.json',
-            json_uri: 'https://arweave.net/mock-metadata-2',
-            metadata: {
-              name: 'Startup Finance Fundamentals',
-              symbol: 'APEC-BUS',
-              description: 'Business skill credential from APEC University',
-              attributes: [
-                { trait_type: 'Student_ID_Internal', value: '2024001' },
-                { trait_type: 'Credential_Type', value: 'Business_Skill' },
-                { trait_type: 'Skill_Business', value: 'Startup Finance' },
-                { trait_type: 'Issuer_Name', value: 'APEC University' },
-                { trait_type: 'Issuer_Address', value: 'ECertifyProgram11111111111111111111111111111' },
-                { trait_type: 'Valid_Until', value: '2025-12-31' },
-              ],
-            },
-          },
-          ownership: {
-            frozen: false,
-            delegated: false,
-            ownership_model: 'single',
-            owner: body.params.ownerAddress,
-          },
-          mutable: false,
-          burnt: false,
-        },
-      ],
-      total: 2,
-      limit: body.params.limit || 1000,
-      page: body.params.page || 1,
-    } as T;
-  }
-  
-  if (body.method === 'getAsset') {
-    return {
-      id: body.params.id,
-      interface: 'V1_NFT',
-      content: {
-        schema: 'https://schema.metaplex.com/nft1.0.json',
-        json_uri: 'https://arweave.net/mock-metadata',
-        metadata: {
-          name: 'Module Python Programming',
-          symbol: 'APEC-TECH',
-          description: 'Technical skill credential from APEC University',
-          attributes: [
-            { trait_type: 'Student_ID_Internal', value: '2024001' },
-            { trait_type: 'Credential_Type', value: 'Technical_Skill' },
-            { trait_type: 'Skill_Tech', value: 'Python' },
-            { trait_type: 'Issuer_Name', value: 'APEC University' },
-            { trait_type: 'Issuer_Address', value: 'ECertifyProgram11111111111111111111111111111' },
-            { trait_type: 'Valid_Until', value: '2025-12-31' },
-          ],
-        },
-      },
-      ownership: {
-        frozen: false,
-        delegated: false,
-        ownership_model: 'single',
-        owner: '11111111111111111111111111111111',
-      },
-      mutable: false,
-      burnt: false,
-    } as T;
-  }
-  
-  if (body.method === 'getAssetProof') {
-    return {
-      root: 'mock-root-hash',
-      proof: ['mock-proof-1', 'mock-proof-2'],
-      node_index: 0,
-      leaf: 'mock-leaf-hash',
-      tree_id: 'mock-tree-id',
-    } as T;
-  }
-  
-  return {} as T;
-}
 
 // Get assets by owner (for student wallet)
 export async function getAssetsByOwner(
@@ -228,46 +114,67 @@ export async function getAssetsByOwner(
   limit: number = 1000,
   page?: number
 ): Promise<HeliusAssetsByOwnerResponse> {
-  const body = {
-    jsonrpc: '2.0',
-    id: 'helius-test',
-    method: 'getAssetsByOwner',
-    params: {
-      ownerAddress,
-      page,
-      limit,
-    },
-  };
+  try {
+    const body = {
+      jsonrpc: '2.0',
+      id: 'helius-test',
+      method: 'getAssetsByOwner',
+      params: {
+        ownerAddress,
+        page,
+        limit,
+      },
+    };
 
-  return makeDASApiCall<HeliusAssetsByOwnerResponse>('', body);
+    return await makeDASApiCall<HeliusAssetsByOwnerResponse>(body);
+  } catch (error) {
+    console.warn('DAS API not available, returning empty response:', error);
+    // Return empty response if DAS API fails
+    return {
+      items: [],
+      total: 0,
+      limit,
+      page: page || 1,
+    };
+  }
 }
 
 // Get specific asset by ID
 export async function getAsset(assetId: string): Promise<HeliusAsset> {
-  const body = {
-    jsonrpc: '2.0',
-    id: 'helius-test',
-    method: 'getAsset',
-    params: {
-      id: assetId,
-    },
-  };
+  try {
+    const body = {
+      jsonrpc: '2.0',
+      id: 'helius-test',
+      method: 'getAsset',
+      params: {
+        id: assetId,
+      },
+    };
 
-  return makeDASApiCall<HeliusAsset>('', body);
+    return await makeDASApiCall<HeliusAsset>(body);
+  } catch (error) {
+    console.warn('DAS API not available for getAsset:', error);
+    throw new Error('Asset not found or DAS API unavailable');
+  }
 }
 
 // Get asset proof for verification
 export async function getAssetProof(assetId: string): Promise<HeliusAssetProof> {
-  const body = {
-    jsonrpc: '2.0',
-    id: 'helius-test',
-    method: 'getAssetProof',
-    params: {
-      id: assetId,
-    },
-  };
+  try {
+    const body = {
+      jsonrpc: '2.0',
+      id: 'helius-test',
+      method: 'getAssetProof',
+      params: {
+        id: assetId,
+      },
+    };
 
-  return makeDASApiCall<HeliusAssetProof>('', body);
+    return await makeDASApiCall<HeliusAssetProof>(body);
+  } catch (error) {
+    console.warn('DAS API not available for getAssetProof:', error);
+    throw new Error('Asset proof not found or DAS API unavailable');
+  }
 }
 
 // Filter assets by issuer (APEC University)

@@ -1,8 +1,10 @@
 import { PublicKey, Transaction, SystemProgram, Connection } from '@solana/web3.js';
 // Removed anchor dependency for now - using custom serialization
 
+import { CONFIG } from './config';
+
 // Program ID - should match the deployed program
-export const ECERTIFY_PROGRAM_ID = new PublicKey('ECertifyProgram11111111111111111111111111111');
+export const ECERTIFY_PROGRAM_ID = new PublicKey(CONFIG.PROGRAM_ID);
 
 // Metaplex Bubblegum Program ID
 export const BUBBLEGUM_PROGRAM_ID = new PublicKey('BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY');
