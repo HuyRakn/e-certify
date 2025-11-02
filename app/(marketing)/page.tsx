@@ -20,7 +20,7 @@ export default function HomePage() {
 						Courses
 					</Link>
 					<Link href="/login">
-						<Button variant="ghost" className="font-medium">
+						<Button variant="ghost" className="font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100">
 							Sign in
 						</Button>
 					</Link>
@@ -57,7 +57,7 @@ export default function HomePage() {
 								<ArrowRight className="ml-2 h-5 w-5" />
 							</Link>
 						</Button>
-						<Button asChild variant="outline" size="lg" className="font-semibold text-lg px-8 py-6 border-2">
+						<Button asChild variant="outline" size="lg" className="font-semibold text-lg px-8 py-6 border-2 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400">
 							<Link href="/courses">
 								<BookOpen className="mr-2 h-5 w-5" />
 								Browse Courses
