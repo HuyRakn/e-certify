@@ -32,23 +32,15 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
+  // Allow any request that carries an OAuth "code" param to pass through
+  // (Supabase/Providers may redirect back to arbitrary app paths with ?code=)
+  if (request.nextUrl.searchParams.has('code')) {
+    return response;
+  }
+
   // NOTE: Supabase client usage is disabled here to keep middleware Edge-compatible.
   // Auth gating happens in server components/routes instead.
   let userRole = 'student';
-
-  // --- Require verified email before accessing the app (except allowed paths) ---
-  if (session && !sessionError) {
-    const emailConfirmedAt = (session.user as any).email_confirmed_at || (session.user as any).confirmed_at;
-    const isVerificationPage = pathname.startsWith('/verify-email');
-    const isAuthOrPublic = pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/signup');
-    if (!emailConfirmedAt && !isVerificationPage && !isAuthOrPublic) {
-      const verifyRedirect = NextResponse.redirect(new URL('/verify-email', request.url));
-      response.cookies.getAll().forEach((cookie) => {
-        verifyRedirect.cookies.set(cookie);
-      });
-      return verifyRedirect;
-    }
-  }
 
   // --- Admin Route Protection ---
   if (pathname.startsWith('/admin')) {
