@@ -76,5 +76,8 @@
  "@fractalwagmi/solana-wallet-adapter": {
  "@solana/web3.js": "^1.87.6"
  }
- }
+  },
+  "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "^1.26.0"
+  }
 }
