@@ -99,6 +99,20 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // --- Require verified email before accessing the app (except allowed paths) ---
+  if (session && !sessionError) {
+    const emailConfirmedAt = (session.user as any).email_confirmed_at || (session.user as any).confirmed_at;
+    const isVerificationPage = pathname.startsWith('/verify-email');
+    const isAuthOrPublic = pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/signup');
+    if (!emailConfirmedAt && !isVerificationPage && !isAuthOrPublic) {
+      const verifyRedirect = NextResponse.redirect(new URL('/verify-email', request.url));
+      response.cookies.getAll().forEach((cookie) => {
+        verifyRedirect.cookies.set(cookie);
+      });
+      return verifyRedirect;
+    }
+  }
+
   // --- Admin Route Protection ---
   if (pathname.startsWith('/admin')) {
     if (userRole !== 'admin') {

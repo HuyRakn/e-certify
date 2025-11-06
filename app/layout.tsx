@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/app/components/theme-provider";
 import { Toaster } from "@/app/components/ui/sonner";
+import { SolanaWalletProvider } from "@/app/components/wallet-provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -39,8 +40,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster />
+          <SolanaWalletProvider>
+            {children}
+            <Toaster />
+          </SolanaWalletProvider>
         </ThemeProvider>
       </body>
     </html>

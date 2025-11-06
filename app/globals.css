@@ -138,3 +138,21 @@
 .text-secondary-solid {
 	color: hsl(200 85% 55%) !important;
 }
+
+/* Marquee scrolling utility for marketing logos */
+@keyframes scroll-marquee-x {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@layer utilities {
+    .animate-scroll {
+        animation: scroll-marquee-x 30s linear infinite;
+        will-change: transform;
+    }
+}
+
+/* Allow pausing when hovered using the existing class on the element */
+.group-hover\:pause-animation:hover {
+    animation-play-state: paused;
+}

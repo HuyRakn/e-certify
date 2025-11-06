@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
-import { DollarSign, Users, BarChart2, BookOpen } from "lucide-react";
+import { DollarSign, Users, BarChart2, BookOpen, ShieldCheck, QrCode } from "lucide-react";
 import { UserAvatar } from "@/app/components/user-avatar";
 import Link from "next/link";
 
@@ -131,8 +131,8 @@ export default function TeacherDashboard() {
           </Card>
         </div>
 
-        {/* Course Management Quick Access */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {/* Quick Access Cards */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader>
               <CardTitle>Manage Your Courses</CardTitle>
@@ -156,6 +156,44 @@ export default function TeacherDashboard() {
             <CardContent>
               <Button asChild variant="default">
                 <Link href="/create-course">Create Course</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card className="border border-purple-200 bg-purple-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-purple-600" />
+                Skills Passport
+              </CardTitle>
+              <CardDescription>
+                View your on-chain certificates and achievements
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
+                <Link href="/passport">
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  Open Passport
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card className="border border-green-200 bg-green-50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <QrCode className="h-5 w-5 text-green-600" />
+                Verify Credentials
+              </CardTitle>
+              <CardDescription>
+                Scan QR code to verify credentials instantly
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+                <Link href="/verify">
+                  <QrCode className="mr-2 h-4 w-4" />
+                  Verify Now
+                </Link>
               </Button>
             </CardContent>
           </Card>

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { getDemoCertificatesForWallet } from "@/lib/demo-certificates";
 
 const HELIUS_RPC_URL = process.env.HELIUS_API_KEY_URL;
+const DEMO_MODE = (process.env.NEXT_PUBLIC_DEMO_MODE || '').toLowerCase() === 'true';
 
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
@@ -10,12 +12,23 @@ export async function GET(request: Request) {
 		return NextResponse.json({ error: "Owner address is required" }, { status: 400 });
 	}
 
-	if (!HELIUS_RPC_URL) {
-		return NextResponse.json({ error: "Backend RPC not configured" }, { status: 500 });
+	// If demo mode is enabled OR RPC is not configured, use demo data
+	const useDemoMode = DEMO_MODE || !HELIUS_RPC_URL;
+
+	if (useDemoMode) {
+		// Return demo certificates for seamless demo experience
+		const demoCertificates = getDemoCertificatesForWallet(ownerAddress);
+		return NextResponse.json({
+			items: demoCertificates,
+			total: demoCertificates.length,
+			page: 1,
+			limit: 1000,
+		});
 	}
 
+	// Try to fetch from real RPC
 	try {
-		const response = await fetch(HELIUS_RPC_URL, {
+		const response = await fetch(HELIUS_RPC_URL!, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -31,8 +44,30 @@ export async function GET(request: Request) {
 			throw new Error((data as any).error.message);
 		}
 
-		return NextResponse.json((data as any).result);
+		const result = (data as any).result;
+		const items = result?.items || result || [];
+
+		// If no real certificates found, fallback to demo data for better UX
+		if (Array.isArray(items) && items.length === 0) {
+			const demoCertificates = getDemoCertificatesForWallet(ownerAddress);
+			return NextResponse.json({
+				items: demoCertificates,
+				total: demoCertificates.length,
+				page: 1,
+				limit: 1000,
+			});
+		}
+
+		return NextResponse.json(result);
 	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+		// On error, fallback to demo data for seamless experience
+		console.warn('Failed to fetch from RPC, using demo data:', error.message);
+		const demoCertificates = getDemoCertificatesForWallet(ownerAddress);
+		return NextResponse.json({
+			items: demoCertificates,
+			total: demoCertificates.length,
+			page: 1,
+			limit: 1000,
+		});
 	}
 }

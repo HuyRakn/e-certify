@@ -4,12 +4,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Card, CardHeader } from "@/app/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
+import { Button } from "@/app/components/ui/button";
 import { EnhancedBannerHero } from "@/app/components/EnhancedBannerHero";
 import { PopularCourses } from "@/app/components/PopularCourses";
 import { CurrentActivity } from "@/app/components/CurrentActivity";
 import { BestInstructors } from "@/app/components/BestInstructors";
 import { UserAvatar } from "@/app/components/user-avatar";
+import { ShieldCheck, QrCode, Award } from "lucide-react";
+import Link from "next/link";
 
 export default function StudentDashboard() {
   const supabase = useMemo(() => createClient(), []);
@@ -68,6 +71,49 @@ export default function StudentDashboard() {
 
         {/* Enhanced Banner Hero */}
         <EnhancedBannerHero />
+
+        {/* Quick Access Cards - Skills Passport & Verification */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Card className="border border-purple-200 bg-purple-50 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-purple-600" />
+                Skills Passport
+              </CardTitle>
+              <CardDescription>
+                View and manage all your on-chain certificates and achievements
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
+                <Link href="/passport">
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  Open Skills Passport
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-green-200 bg-green-50 shadow-sm hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <QrCode className="h-5 w-5 text-green-600" />
+                Verify Credentials
+              </CardTitle>
+              <CardDescription>
+                Scan QR code or verify any credential instantly
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+                <Link href="/verify">
+                  <QrCode className="mr-2 h-4 w-4" />
+                  Verify Now
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Main Content Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr_380px] gap-6">
