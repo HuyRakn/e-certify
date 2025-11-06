@@ -1,6 +1,5 @@
 // middleware.ts
 // All code and comments must be in English.
-import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
@@ -12,29 +11,6 @@ export async function middleware(request: NextRequest) {
       headers: request.headers,
     },
   });
-
-  // Create a Supabase client for middleware with proper cookie handling
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options) {
-          // Set cookie in both request and response
-          request.cookies.set({ name, value, ...options });
-          response.cookies.set({ name, value, ...options });
-        },
-        remove(name: string, options: any) {
-          // Remove cookie from both request and response
-          request.cookies.set({ name, value: '', ...options });
-          response.cookies.set({ name, value: '', ...options });
-        },
-      },
-    }
-  );
 
   // Allow access to auth callback routes FIRST (these handle session exchange)
   // This must be checked before session check to avoid redirect loops
@@ -56,48 +32,9 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  // Now check session for protected routes
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-  // If no session and trying to access protected route, redirect to login
-  if (!session || sessionError) {
-    // Only redirect if not already on login page
-    if (pathname !== '/login') {
-      const loginRedirect = NextResponse.redirect(new URL('/login', request.url));
-      // Copy cookies from current response to redirect response
-      response.cookies.getAll().forEach((cookie) => {
-        loginRedirect.cookies.set(cookie);
-      });
-      return loginRedirect;
-    }
-    return response;
-  }
-
-  // Get user role from JWT token (user_role claim added by Auth Hook)
-  // Fallback to database query if JWT claim is not available
+  // NOTE: Supabase client usage is disabled here to keep middleware Edge-compatible.
+  // Auth gating happens in server components/routes instead.
   let userRole = 'student';
-  
-  // Try to get role from JWT token first (faster, no DB query)
-  if (session.user && (session.user as any).user_metadata?.user_role) {
-    userRole = (session.user as any).user_metadata.user_role;
-  } else if (session.user && (session.user as any).app_metadata?.user_role) {
-    userRole = (session.user as any).app_metadata.user_role;
-  } else {
-    // Fallback: query database if JWT claim is not available
-    try {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single();
-      
-      if (profile) {
-        userRole = profile.role || 'student';
-      }
-    } catch (error) {
-      console.error('Failed to fetch user role:', error);
-    }
-  }
 
   // --- Require verified email before accessing the app (except allowed paths) ---
   if (session && !sessionError) {

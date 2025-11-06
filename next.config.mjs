@@ -45,6 +45,13 @@ const nextConfig = {
         }
       )
     );
+    // Avoid bundling optional pretty logger in browser/server builds
+    // Some walletconnect deps reference pino's pretty printer optionally
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      'pino-pretty': false,
+    };
     
     return config;
   },
