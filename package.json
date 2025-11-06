@@ -46,6 +46,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.181.0",
+    "lightningcss": "^1.26.0",
     "web3.js-v1": "npm:@solana/web3.js@^1.87.6"
   },
   "devDependencies": {
