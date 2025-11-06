@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "build": "cross-env NEXT_DISABLE_LIGHTNINGCSS=1 next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "anchor:build": "anchor build --program-name e_certify_program",
@@ -50,6 +50,7 @@
     "web3.js-v1": "npm:@solana/web3.js@^1.87.6"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^20.14.10",
     "@types/react": "^19.2.2",
