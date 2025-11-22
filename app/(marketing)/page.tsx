@@ -361,7 +361,7 @@ export default function HomePage() {
 				>
 					{/* Left Column (Text & CTAs) */}
 					<motion.div
-						className="flex flex-col text-left space-y-5 justify-center"
+						className="flex flex-col text-left space-y-5 justify-center w-full"
 						variants={staggerContainer}
 					>
 						<motion.div variants={fadeInFromBottom}>
@@ -384,79 +384,111 @@ export default function HomePage() {
 							className="text-lg md:text-xl text-gray-600 max-w-2xl leading-relaxed"
 							variants={fadeInFromBottom}
 						>
-							Professional online courses for the APEC ecosystem. Learn, earn,
-							and showcase your achievements with blockchain-verified
-							certificates.
+							Professional online courses for the APEC ecosystem.{" "}
+							<span className="whitespace-nowrap">Learn, earn,</span> and showcase your achievements with{" "}
+							<span className="whitespace-nowrap">blockchain-verified</span> certificates.
 						</motion.p>
 
 						<motion.div
-							className="flex flex-col sm:flex-row items-start justify-start gap-4"
+							className="w-full"
 							variants={fadeInFromBottom}
 						>
-							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-								<Button
-									asChild
-									size="lg"
-									className="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-lg px-8 py-6 shadow-lg"
+							<div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 sm:gap-6 w-full sm:w-[520px]">
+								<motion.div 
+									className="w-full sm:w-auto sm:flex-1"
+									whileHover={{ scale: 1.02 }} 
+									whileTap={{ scale: 0.98 }}
 								>
-									<Link href="/signup">
-										Get Started Free
-										<ArrowRight className="ml-2 h-5 w-5" />
-									</Link>
-								</Button>
-							</motion.div>
-							<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-								<Button
-									asChild
-									variant="outline"
-									size="lg"
-									className="font-semibold text-lg px-8 py-6 border-2 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
+									<Button
+										asChild
+										size="lg"
+										className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-semibold text-lg px-8 py-6 shadow-lg"
+									>
+										<Link href="/signup" className="flex items-center justify-center">
+											Get Started Free
+											<ArrowRight className="ml-2 h-5 w-5" />
+										</Link>
+									</Button>
+								</motion.div>
+								<motion.div 
+									className="w-full sm:w-auto sm:flex-1"
+									whileHover={{ scale: 1.02 }} 
+									whileTap={{ scale: 0.98 }}
 								>
-									<Link href="#courses">
-										<BookOpen className="mr-2 h-5 w-5" />
-										Browse Courses
-									</Link>
-								</Button>
-							</motion.div>
+									<Button
+										asChild
+										variant="outline"
+										size="lg"
+										className="w-full sm:w-auto font-semibold text-lg px-8 py-6 border-2 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
+									>
+										<Link href="#courses" className="flex items-center justify-center">
+											<BookOpen className="mr-2 h-5 w-5" />
+											Browse Courses
+										</Link>
+									</Button>
+								</motion.div>
+							</div>
 						</motion.div>
 
 						{/* Stats Section - Moved inside hero, below CTAs */}
 						<motion.div
-							className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4"
+							className="w-full pt-6"
 							variants={fadeInFromBottom}
 						>
-							<motion.div className="text-left" variants={fadeInFromBottom}>
-								<div className="text-2xl md:text-3xl font-bold text-gray-900">
-									1000+
-								</div>
-								<div className="text-xs md:text-sm text-gray-600 mt-1">
-									Active Students
-								</div>
-							</motion.div>
-							<motion.div className="text-left" variants={fadeInFromBottom}>
-								<div className="text-2xl md:text-3xl font-bold text-gray-900">
-									50+
-								</div>
-								<div className="text-xs md:text-sm text-gray-600 mt-1">
-									Expert Courses
-								</div>
-							</motion.div>
-							<motion.div className="text-left" variants={fadeInFromBottom}>
-								<div className="text-2xl md:text-3xl font-bold text-gray-900">
-									95%
-								</div>
-								<div className="text-xs md:text-sm text-gray-600 mt-1">
-									Completion Rate
-								</div>
-							</motion.div>
-							<motion.div className="text-left" variants={fadeInFromBottom}>
-								<div className="text-2xl md:text-3xl font-bold text-gray-900">
-									4.9/5
-								</div>
-								<div className="text-xs md:text-sm text-gray-600 mt-1">
-									Avg. Rating
-								</div>
-							</motion.div>
+							<div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full md:w-[520px] justify-items-center md:justify-items-start">
+								<motion.div 
+									className="text-center md:text-left" 
+									variants={fadeInFromBottom}
+									whileHover={{ scale: 1.05 }}
+									transition={{ type: "spring", stiffness: 300 }}
+								>
+									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+										1000+
+									</div>
+									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+										Active Students
+									</div>
+								</motion.div>
+								<motion.div 
+									className="text-center md:text-left" 
+									variants={fadeInFromBottom}
+									whileHover={{ scale: 1.05 }}
+									transition={{ type: "spring", stiffness: 300 }}
+								>
+									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+										50+
+									</div>
+									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+										Expert Courses
+									</div>
+								</motion.div>
+								<motion.div 
+									className="text-center md:text-left" 
+									variants={fadeInFromBottom}
+									whileHover={{ scale: 1.05 }}
+									transition={{ type: "spring", stiffness: 300 }}
+								>
+									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+										95%
+									</div>
+									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+										Completion Rate
+									</div>
+								</motion.div>
+								<motion.div 
+									className="text-center md:text-left" 
+									variants={fadeInFromBottom}
+									whileHover={{ scale: 1.05 }}
+									transition={{ type: "spring", stiffness: 300 }}
+								>
+									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+										4.9/5
+									</div>
+									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+										Avg. Rating
+									</div>
+								</motion.div>
+							</div>
 						</motion.div>
 					</motion.div>
 
@@ -773,7 +805,7 @@ export default function HomePage() {
 									<Star className="h-5 w-5 fill-current" />
 									<Star className="h-5 w-5 fill-current" />
 								</div>
-								<p className="text-gray-700 text-lg leading-relaxed mb-6">
+								<p className="text-gray-700 text-lg leading-relaxed mb-6 text-justify">
 									"{item.quote}"
 								</p>
 								<div className="flex items-center gap-4">
