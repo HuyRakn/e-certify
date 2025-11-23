@@ -19,7 +19,7 @@ export default function CourseCard({ course, isEnrolled }: { course: any; isEnro
   const colorIndex = Math.abs((course?.id?.charCodeAt(0) || 0) % thumbnailColors.length);
 
   return (
-    <Card className="group overflow-hidden transition-all hover:shadow-lg">
+    <Card className="group flex h-full flex-col overflow-hidden transition-all hover:shadow-lg">
       <div className={cn("relative h-48 w-full overflow-hidden", thumbnailColors[colorIndex])}>
         <div className="absolute inset-0 flex items-center justify-center">
           <BookOpen className="h-16 w-16 text-white/20" />
@@ -41,7 +41,7 @@ export default function CourseCard({ course, isEnrolled }: { course: any; isEnro
         <CardTitle className="line-clamp-2 text-lg">{course?.title}</CardTitle>
         <CardDescription className="line-clamp-2">{course?.description}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="flex flex-1 flex-col space-y-3">
         <div className="flex items-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
@@ -52,7 +52,7 @@ export default function CourseCard({ course, isEnrolled }: { course: any; isEnro
             <span>Intermediate</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="mt-auto flex items-center gap-2">
           <Button
             asChild
             className={cn(
