@@ -88,15 +88,6 @@ export default function SkillsPassportPage() {
               </div>
             </div>
           </div>
-          {/* Wallet Indicator - Clean, minimal: Logo + Address */}
-          <div className="hidden md:flex">
-            <WalletIndicator />
-          </div>
-        </div>
-        
-        {/* Mobile Wallet Indicator */}
-        <div className="md:hidden flex justify-end">
-          <WalletIndicator />
         </div>
 
         {/* Wallet Connection Prompt */}
