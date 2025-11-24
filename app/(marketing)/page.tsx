@@ -367,7 +367,7 @@ export default function HomePage() {
 						<motion.div variants={fadeInFromBottom}>
 							<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium">
 								<Award className="h-4 w-4" />
-								<span>Verifiable On-Chain Certificates on Solana</span>
+								<span>Verifiable <span className="whitespace-nowrap">On-Chain</span> Certificates on Solana</span>
 							</div>
 						</motion.div>
 
@@ -377,7 +377,7 @@ export default function HomePage() {
 						>
 							The New Standard
 							<br />
-							for <span className="text-purple-600">Verified Skills</span>
+							for <span className="text-purple-600 text-[2.4rem] md:text-[3.5rem] lg:text-[4.2rem] whitespace-nowrap">Verified Skills</span>
 						</motion.h1>
 
 						<motion.p
@@ -471,7 +471,7 @@ export default function HomePage() {
 									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
 										95%
 									</div>
-									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium whitespace-nowrap">
 										Completion Rate
 									</div>
 								</motion.div>
@@ -607,7 +607,7 @@ export default function HomePage() {
 							<div className="h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center mb-6 mx-auto">
 								<ShieldCheck className="h-10 w-10 text-indigo-600" />
 							</div>
-							<h3 className="text-2xl font-bold text-gray-900 mb-2">
+							<h3 className="text-2xl font-bold text-gray-900 mb-2 whitespace-nowrap">
 								3. Get Verified On-Chain
 							</h3>
 							<p className="text-gray-600">
