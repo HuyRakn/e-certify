@@ -8,8 +8,9 @@ import SearchPanel from './SearchPanel';
 export default function Shell({ title, subtitle, headerRight, children, rightPanel }: { title: string; subtitle?: string; headerRight?: React.ReactNode; children: React.ReactNode; rightPanel?: React.ReactNode }) {
   return (
     <div className="p-6">
-      <div className="mx-auto max-w-7xl grid grid-cols-1 gap-6 lg:grid-cols-[240px_1fr_320px] items-start">
-        <div className="sticky top-4 h-fit"><UnifiedSidebar /></div>
+      {/* Sidebar is now fixed, so we need to account for its width + margin */}
+      <div className="mx-auto max-w-7xl grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] items-start lg:ml-[280px]">
+        <UnifiedSidebar />
         <div className="space-y-4">
           <div className="card">
             <UnifiedHeader title={title} subtitle={subtitle} right={headerRight} />

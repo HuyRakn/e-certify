@@ -3,7 +3,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Search, Bell, Menu } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -27,11 +27,39 @@ function AddressCard() {
 // --- Main PlatformHeader ---
 export default function PlatformHeader({ userEmail, onMenuClick, onMobileSearchToggle, isMobileSearchOpen }: PlatformHeaderProps & { onMenuClick?: () => void; onMobileSearchToggle?: () => void; isMobileSearchOpen?: boolean; }) {
     const [searchQuery, setSearchQuery] = useState("");
+    const [isVisible, setIsVisible] = useState(true);
+    const lastScrollY = useRef(0);
 
-	return (
-		<header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 shadow-sm">
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY < 50) {
+                // Always show when near top
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY.current) {
+                // Scrolling down - hide
+                setIsVisible(false);
+            } else {
+                // Scrolling up - show
+                setIsVisible(true);
+            }
+            
+            lastScrollY.current = currentScrollY;
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+return (
+		<header 
+            className={`sticky top-4 z-50 w-full border border-white/25 bg-white/80 backdrop-blur-2xl backdrop-saturate-180 supports-[backdrop-filter]:bg-white/65 shadow-[0_8px_30px_rgba(15,23,42,0.12)] rounded-3xl transition-all duration-300 ${
+                isVisible ? "translate-y-0 opacity-100" : "-translate-y-[calc(100%+2rem)] opacity-0"
+            }`}
+        >
 			<motion.div
-				className="flex h-16 items-center justify-between gap-4 px-4 md:px-6 lg:px-8"
+				className="flex h-16 items-center justify-between gap-4 px-4 md:px-5 lg:px-6"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -80,7 +108,7 @@ export default function PlatformHeader({ userEmail, onMenuClick, onMobileSearchT
 						className="relative h-10 w-10 text-muted-foreground hover:text-foreground hover:bg-muted"
 					>
 						<Bell className="h-5 w-5" />
-						<span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-accent border-2 border-background" />
+						<span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-[#ff4d6d] border-2 border-white" />
 					</Button>
 
 				{/* Address card (replaces avatar + dropdown) */}
@@ -88,7 +116,7 @@ export default function PlatformHeader({ userEmail, onMenuClick, onMobileSearchT
                 </div>
 			</motion.div>
             {/* Mobile expanding search input */}
-            <div className="lg:hidden px-4 md:px-6 pb-3">
+            <div className="lg:hidden px-4 md:px-5 pb-3">
                 <motion.div
                     initial={false}
                     animate={{ height: isMobileSearchOpen ? "auto" : 0, opacity: isMobileSearchOpen ? 1 : 0 }}

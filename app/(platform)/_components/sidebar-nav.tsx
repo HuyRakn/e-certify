@@ -83,18 +83,18 @@ export function SidebarNav({ userRole, showLabels = false }: { userRole: string;
 						<Button
 							variant="ghost"
 							className={cn(
-								"justify-start text-left h-12 w-full transition-all rounded-lg",
+								"justify-start text-left h-12 w-full transition-all rounded-2xl border",
 								"md:justify-center lg:justify-start",
 								"md:px-2 lg:px-4",
 								// (REFACTORED) New "active" style: subtle, clean, modern.
 								isActive
-									? "bg-primary/10 text-primary font-semibold shadow-sm"
-									: "text-muted-foreground hover:text-primary hover:bg-primary/5"
+									? "bg-[var(--brand-primary)]/12 text-[var(--brand-primary)] font-semibold border-[var(--brand-primary)]/30 shadow-soft-sm"
+									: "text-muted-foreground hover:text-[var(--brand-primary)] hover:bg-[var(--brand-primary)]/6 border-transparent"
 							)}
 							asChild
 						>
 					<Link href={item.href}>
-						<Icon className="h-5 w-5 shrink-0 md:mx-0 lg:mr-3" />
+						<Icon className={cn("h-5 w-5 shrink-0 md:mx-0 lg:mr-3", isActive ? "text-[var(--brand-primary)]" : "")} />
 						<span className={cn(showLabels ? "inline-block" : "hidden lg:inline-block")}>{item.label}</span>
 					</Link>
 						</Button>

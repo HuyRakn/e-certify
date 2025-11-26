@@ -1,142 +1,194 @@
 @import "tailwindcss";
 
 @theme {
-	/* Neutral base */
-	--color-background: oklch(100% 0 0);
-	--color-foreground: oklch(20% 0.05 240);
-	--color-muted: oklch(96% 0 0);
-	--color-muted-foreground: oklch(50% 0.02 240);
-	--color-popover: oklch(100% 0 0);
-	--color-popover-foreground: oklch(20% 0.05 240);
-	--color-card: oklch(100% 0 0);
-	--color-card-foreground: oklch(20% 0.05 240);
-	--color-border: oklch(91% 0 0);
-	--color-input: oklch(91% 0 0);
-	--color-ring: oklch(65% 0.25 270);
+	/* Soft UI palette (OKLCH) */
+	--color-background: oklch(97% 0.02 240);
+	--color-foreground: oklch(28% 0.04 240);
+	--color-muted: oklch(92% 0.015 240);
+	--color-muted-foreground: oklch(55% 0.02 240);
+	--color-popover: oklch(99% 0.005 240);
+	--color-popover-foreground: oklch(28% 0.04 240);
+	--color-card: oklch(99% 0.005 240);
+	--color-card-foreground: oklch(28% 0.04 240);
+	--color-border: oklch(90% 0.01 240);
+	--color-input: oklch(92% 0.012 240);
+	--color-ring: oklch(62% 0.18 265);
 	--radius: 0.75rem;
 
-	/* Colorful palette - VERY BRIGHT AND VIBRANT */
-	/* Primary: Vibrant Purple/Blue */
-	--color-primary: oklch(65% 0.35 280);
-	--color-primary-foreground: oklch(100% 0 0);
-	
-	/* Secondary: Bright Teal/Cyan */
-	--color-secondary: oklch(60% 0.30 200);
-	--color-secondary-foreground: oklch(100% 0 0);
-	
-	/* Accent: Vibrant Orange */
-	--color-accent: oklch(65% 0.30 60);
-	--color-accent-foreground: oklch(100% 0 0);
-	
-	/* Destructive: Red */
-	--color-destructive: oklch(65% 0.25 25);
-	--color-destructive-foreground: oklch(100% 0 0);
-	
-	/* Success: Green */
-	--color-success: oklch(60% 0.25 150);
-	--color-success-foreground: oklch(100% 0 0);
-	
-	/* Info: Blue */
-	--color-info: oklch(65% 0.30 240);
-	--color-info-foreground: oklch(100% 0 0);
-	
-	/* Warning: Amber */
-	--color-warning: oklch(70% 0.25 85);
-	--color-warning-foreground: oklch(100% 0 0);
+	--color-primary: oklch(62% 0.25 272);
+	--color-primary-foreground: oklch(98% 0.01 255);
+	--color-secondary: oklch(94% 0.02 250);
+	--color-secondary-foreground: oklch(40% 0.03 250);
+	--color-accent: oklch(68% 0.18 260);
+	--color-accent-foreground: oklch(98% 0.01 255);
+	--color-destructive: oklch(60% 0.24 25);
+	--color-destructive-foreground: oklch(99% 0 0);
+	--color-success: oklch(70% 0.18 160);
+	--color-success-foreground: oklch(99% 0 0);
+	--color-info: oklch(70% 0.20 250);
+	--color-info-foreground: oklch(98% 0.01 260);
+	--color-warning: oklch(78% 0.16 85);
+	--color-warning-foreground: oklch(26% 0.03 90);
 }
 
 :root {
-	/* Fallback HSL variables for compatibility */
-	--background: 0 0% 100%;
-	--foreground: 222 47% 11%;
-	--muted: 220 14% 96%;
-	--muted-foreground: 220 9% 46%;
+	/* Brand Color - Source of Truth (Extract from Logo Image 4) */
+	/* Default: Indigo-600 (#4f46e5) - Replace with actual logo color */
+	--brand-primary: #4f46e5;
+	--brand-primary-foreground: #ffffff;
+	--brand-surface: rgba(79, 70, 229, 0.08);
+	--brand-hover: #4338ca;
+
+	/* Soft UI tokens */
+	--soft-bg: #f4f3ff;
+	--soft-surface: #ffffff;
+	--soft-surface-muted: #eef2ff;
+	--soft-text: #1e293b;
+	--soft-text-muted: #475569;
+	--soft-primary: #4f46e5;
+	--soft-primary-strong: #4338ca;
+	--soft-primary-tint: #c7d2fe;
+	--soft-border: #e2e8f0;
+	--soft-input: #f1f5f9;
+	--shadow-soft-sm: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 4px rgba(15, 23, 42, 0.04);
+	--shadow-soft: 0 14px 35px rgba(15, 23, 42, 0.1), 0 6px 20px rgba(15, 23, 42, 0.06);
+	--shadow-soft-lg: 0 24px 50px rgba(15, 23, 42, 0.14), 0 10px 30px rgba(15, 23, 42, 0.08);
+	--radius-card: 1.5rem;
+	--radius-btn: 9999px;
+	--radius-input: 0.9rem;
+	--transition-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Tailwind HSL tokens */
+	--background: 220 33% 98%;
+	--foreground: 215 28% 17%;
+	--muted: 220 30% 94%;
+	--muted-foreground: 215 16% 45%;
 	--popover: 0 0% 100%;
-	--popover-foreground: 222 47% 11%;
+	--popover-foreground: 215 28% 17%;
 	--card: 0 0% 100%;
-	--card-foreground: 222 47% 11%;
-	--border: 220 13% 91%;
-	--input: 220 13% 91%;
-	--ring: 270 65% 65%;
+	--card-foreground: 215 28% 17%;
+	--border: 215 25% 88%;
+	--input: 215 25% 90%;
+	--ring: 243 75% 58%;
 	--radius: 0.75rem;
 
-	/* Colorful palette - VERY BRIGHT HSL for compatibility */
-	--primary: 280 85% 60%;
-	--primary-foreground: 0 0% 100%;
-	
-	--secondary: 200 85% 55%;
-	--secondary-foreground: 0 0% 100%;
-	
-	--accent: 25 100% 60%;
-	--accent-foreground: 0 0% 100%;
-	
-	--destructive: 0 84% 60%;
-	--destructive-foreground: 0 0% 100%;
-	
-	--success: 150 70% 55%;
-	--success-foreground: 0 0% 100%;
-	
-	--info: 240 85% 60%;
-	--info-foreground: 0 0% 100%;
-	
-	--warning: 45 95% 55%;
-	--warning-foreground: 0 0% 100%;
+	--primary: 243 75% 58%;
+	--primary-foreground: 220 33% 98%;
+	--secondary: 230 40% 96%;
+	--secondary-foreground: 220 18% 35%;
+	--accent: 251 63% 71%;
+	--accent-foreground: 220 33% 98%;
+	--destructive: 2 80% 58%;
+	--destructive-foreground: 210 33% 98%;
+	--success: 161 68% 42%;
+	--success-foreground: 210 33% 98%;
+	--info: 210 85% 60%;
+	--info-foreground: 210 33% 98%;
+	--warning: 38 92% 55%;
+	--warning-foreground: 20 20% 20%;
 }
 
 .dark {
-	--background: 222 47% 11%;
-	--foreground: 0 0% 100%;
-	--muted: 222 14% 16%;
-	--muted-foreground: 220 9% 70%;
-	--popover: 222 47% 11%;
-	--popover-foreground: 0 0% 100%;
-	--card: 222 47% 12%;
-	--card-foreground: 0 0% 100%;
-	--border: 223 13% 20%;
-	--input: 223 13% 20%;
-	--ring: 270 65% 65%;
+	/* Brand colors in dark mode - Use neutral dark, NOT slate (avoids blue tint) */
+	--brand-primary: #818cf8;
+	--brand-primary-foreground: #0f172a;
+	--brand-surface: rgba(129, 140, 248, 0.1);
+	--brand-hover: #a5b4fc;
 
-	--primary: 280 80% 70%;
-	--primary-foreground: 222 47% 11%;
-	--secondary: 200 80% 65%;
-	--secondary-foreground: 222 47% 11%;
-	--accent: 25 95% 65%;
-	--accent-foreground: 222 47% 11%;
-	
-	--success: 150 70% 60%;
-	--success-foreground: 222 47% 11%;
-	--info: 240 80% 70%;
-	--info-foreground: 222 47% 11%;
-	--warning: 45 90% 60%;
-	--warning-foreground: 222 47% 11%;
+	/* Soft UI tokens - Using neutral grays, NOT slate/zinc to avoid blue tint */
+	--soft-bg: #0a0a0a;
+	--soft-surface: #111111;
+	--soft-surface-muted: #1a1a1a;
+	--soft-text: #f8fafc;
+	--soft-text-muted: #cbd5e1;
+	--soft-border: #1a1a1a;
+	--soft-input: #1a1a1a;
+	--soft-primary: #818cf8;
+	--soft-primary-strong: #a5b4fc;
+	--soft-primary-tint: #312e81;
+
+	--background: 222 47% 9%;
+	--foreground: 0 0% 100%;
+	--muted: 222 20% 18%;
+	--muted-foreground: 220 9% 72%;
+	--popover: 222 47% 9%;
+	--popover-foreground: 0 0% 100%;
+	--card: 222 47% 10%;
+	--card-foreground: 0 0% 100%;
+	--border: 222 24% 20%;
+	--input: 222 24% 18%;
+	--ring: 243 70% 70%;
+	--primary: 243 70% 70%;
+	--primary-foreground: 215 28% 17%;
+	--secondary: 220 20% 20%;
+	--secondary-foreground: 0 0% 100%;
+	--accent: 251 63% 66%;
+	--accent-foreground: 215 28% 17%;
+	--success: 160 60% 50%;
+	--success-foreground: 215 28% 17%;
+	--info: 210 70% 60%;
+	--info-foreground: 215 28% 17%;
+	--warning: 40 80% 60%;
+	--warning-foreground: 215 28% 17%;
 }
 
-/* Smooth typography and section spacing */
 @layer base {
 	* {
-		border-color: hsl(var(--border));
+		border-color: var(--soft-border);
 	}
 	body { 
-		background-color: hsl(var(--background));
-		color: hsl(var(--foreground));
+		background-color: var(--soft-bg);
+		color: var(--soft-text);
+		font-feature-settings: "liga" 1, "calt" 0;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+	h1, h2, h3, h4, h5, h6 {
+		color: var(--soft-text);
+	}
+	p {
+		color: var(--soft-text-muted);
+	}
+	/* Logo protection - Prevent color filters on brand logo */
+	img[alt*="logo" i],
+	img[alt*="Logo" i],
+	.logo,
+	[class*="logo"] img {
+		filter: none !important;
+		mix-blend-mode: normal !important;
+		opacity: 1 !important;
 	}
 }
 
-/* Direct color utility classes for testing */
-.bg-primary-solid {
-	background-color: hsl(280 85% 60%) !important;
-}
-.bg-secondary-solid {
-	background-color: hsl(200 85% 55%) !important;
-}
-.bg-accent-solid {
-	background-color: hsl(25 100% 60%) !important;
-}
-.text-primary-solid {
-	color: hsl(280 85% 60%) !important;
-}
-.text-secondary-solid {
-	color: hsl(200 85% 55%) !important;
+@layer components {
+	.card {
+		background: var(--soft-surface);
+		border-radius: var(--radius-card);
+		box-shadow: var(--shadow-soft-sm);
+		padding: 1.25rem;
+		border: none;
+		transition: transform 0.3s var(--transition-soft), box-shadow 0.3s var(--transition-soft);
+	}
+	.card:hover {
+		box-shadow: var(--shadow-soft);
+		transform: translateY(-4px);
+	}
+	.btn-ghost {
+		border-radius: var(--radius-btn);
+		background-color: transparent;
+		color: var(--soft-text-muted);
+		transition: all 0.3s var(--transition-soft);
+	}
+	.btn-ghost:hover {
+		background-color: var(--brand-surface);
+		color: var(--brand-primary);
+	}
+	.soft-icon {
+		border-radius: 1rem;
+		background-color: var(--brand-surface);
+		color: var(--brand-primary);
+		box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+	}
 }
 
 /* Marquee scrolling utility for marketing logos */
@@ -150,9 +202,7 @@
         animation: scroll-marquee-x 30s linear infinite;
         will-change: transform;
     }
-}
-
-/* Allow pausing when hovered using the existing class on the element */
-.group-hover\:pause-animation:hover {
-    animation-play-state: paused;
+    .group-hover\:pause-animation:hover {
+        animation-play-state: paused;
+    }
 }

@@ -1,0 +1,40 @@
+# Cursor AI Rules - Brand Identity & Design System
+
+## CRITICAL: Brand Color Protection
+- **NEVER** use default Tailwind colors (blue-*, indigo-*, slate-*, zinc-*) for brand elements
+- **ALWAYS** use `bg-brand`, `text-brand`, or `var(--brand-primary)` for primary brand color
+- The brand color is defined in `app/globals.css` as `--brand-primary`
+- If you need to extract color from logo, use the exact hex value and update `--brand-primary` in globals.css
+
+## Logo Protection
+- **NEVER** apply CSS filters (filter, mix-blend-mode, opacity) to logo images
+- Logo images must have: `filter: none !important; mix-blend-mode: normal !important;`
+- This is enforced in `app/globals.css` for all `img[alt*="logo"]` elements
+
+## Design System Rules
+1. **No Linear Gradients**: Replace all `bg-gradient-to-*` with solid colors using brand tokens
+2. **Soft UI Philosophy**: 
+   - Use `rounded-3xl` for large containers (Sidebar, Navbar)
+   - Use `backdrop-blur-2xl backdrop-saturate-180` for glassmorphism
+   - Use `shadow-soft`, `shadow-soft-sm`, `shadow-soft-lg` for depth
+3. **Floating Layout**:
+   - Sidebar: `fixed top-4 left-4 bottom-4` with `rounded-3xl`
+   - Navbar: `sticky top-4` with `rounded-3xl` and glassmorphism
+   - Always add margins (`m-4`, `mx-4`) to detach from viewport edges
+
+## Color System
+- **Primary**: Use `bg-brand` or `var(--brand-primary)`
+- **Surface**: Use `bg-soft-surface` or `var(--soft-surface)`
+- **Text**: Use `text-soft-text` or `text-soft-text-muted`
+- **Avoid**: `bg-slate-*`, `bg-zinc-*` (causes blue tint in dark mode)
+
+## Layout Constraints
+- **NEVER** change grid/flex structure when refactoring UI
+- Only modify: border-radius, shadow, margin, background-color, backdrop-filter
+- Sidebar is fixed, so main content needs `ml-[280px]` or equivalent margin
+
+## Dark Mode
+- Use neutral grays (`#0a0a0a`, `#111111`) NOT slate colors
+- Slate colors have blue tint that causes "ghost blue" artifacts
+- Brand color adapts: `--brand-primary` in dark mode is lighter variant
+

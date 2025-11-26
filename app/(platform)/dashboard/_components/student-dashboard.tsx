@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app
 import { Button } from "@/app/components/ui/button";
 import { EnhancedBannerHero } from "@/app/components/EnhancedBannerHero";
 import { PopularCourses } from "@/app/components/PopularCourses";
-import { CurrentActivity } from "@/app/components/CurrentActivity";
+import { CurrentActivity, ActivityStats } from "@/app/components/CurrentActivity";
 import { BestInstructors } from "@/app/components/BestInstructors";
 import { UserAvatar } from "@/app/components/user-avatar";
 import { ShieldCheck, QrCode, Award } from "lucide-react";
@@ -57,97 +57,49 @@ export default function StudentDashboard() {
     : [];
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-[1600px] space-y-6 p-6 md:p-8 lg:p-10">
-        {/* Page Header */}
-        <div className="space-y-1">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
-            Analytics Overview
-          </h1>
-          <p className="text-sm text-slate-600">
-            Track your learning progress and achievements
-          </p>
+    <div className="space-y-6">
+      {/* Block 1: Enhanced Banner Hero - Floating Card */}
+      <EnhancedBannerHero />
+
+      {/* Main Content Layout */}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[4fr_1.5fr]">
+        {/* Block 2: Left Column - Chart, Popular Courses & Stats in one floating card */}
+        <div className="rounded-3xl border border-white/40 bg-white shadow-soft-sm p-6 space-y-6">
+          <CurrentActivity />
+          <PopularCourses courses={popularCourses} />
+          <ActivityStats />
         </div>
 
-        {/* Enhanced Banner Hero */}
-        <EnhancedBannerHero />
-
-        {/* Quick Access Cards - Skills Passport & Verification */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="border border-purple-200 bg-purple-50 shadow-sm hover:shadow-md transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-purple-600" />
-                Skills Passport
-              </CardTitle>
-              <CardDescription>
-                View and manage all your on-chain certificates and achievements
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
-                <Link href="/passport">
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  Open Skills Passport
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-green-200 bg-green-50 shadow-sm hover:shadow-md transition-shadow">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <QrCode className="h-5 w-5 text-green-600" />
-                Verify Credentials
-              </CardTitle>
-              <CardDescription>
-                Scan QR code or verify any credential instantly
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button asChild className="w-full bg-green-600 hover:bg-green-700">
-                <Link href="/verify">
-                  <QrCode className="mr-2 h-4 w-4" />
-                  Verify Now
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Content Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr_380px] gap-6">
-          {/* Left Sidebar - Popular Courses */}
-          <div className="space-y-6">
-            <PopularCourses courses={popularCourses} />
-          </div>
-
-          {/* Center Content - Current Activity */}
-          <div className="space-y-6">
-            <CurrentActivity />
-          </div>
-
-          {/* Right Sidebar - User Profile & Best Instructors */}
-          <div className="space-y-6">
-            {/* User Profile Card */}
-            <Card className="border border-slate-200 bg-white shadow-sm">
-              <CardHeader className="pb-6">
-                <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="relative">
-                    <UserAvatar value={userEmail || "user"} size={72} />
-                    <div className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-green-500 border-3 border-white"></div>
-                  </div>
-                  <div className="space-y-0.5">
-                    <p className="text-xs font-medium text-slate-500">Good Morning</p>
-                    <p className="text-lg font-bold text-slate-900">
-                      {userEmail?.split("@")[0] || "User"}
-                    </p>
-                    <p className="text-xs text-slate-500">{userEmail || "user@example.com"}</p>
-                  </div>
+        {/* Right Column - Profile & Instructors as separate floating blocks */}
+        {/* Sticky wrapper - aligns with sidebar top position when scrolling */}
+        {/* Sidebar: fixed left-4 top-4 (16px from viewport top) */}
+        {/* Header: sticky top-4 (16px) with h-16 (64px) */}
+        {/* Main container: pt-4 (16px) + header space */}
+        {/* When main scrolls, sticky element should align with sidebar at viewport top-4 */}
+        {/* Since main has overflow-y-auto, sticky is relative to main container */}
+        {/* We use top-4 to match sidebar's top-4 position */}
+        <div className="xl:sticky xl:top-4 xl:h-fit xl:self-start space-y-6">
+          {/* Block 3: User Profile */}
+          <Card className="border border-white/40 bg-white shadow-soft-sm rounded-3xl">
+            <CardHeader className="pb-6">
+              <div className="flex flex-col items-center text-center space-y-3">
+                <div className="relative">
+                  <UserAvatar value={userEmail || "user"} size={60} />
+                  <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white"></div>
                 </div>
-              </CardHeader>
-            </Card>
+                <div className="space-y-0.5">
+                  <p className="text-[11px] font-medium text-soft-text-muted uppercase tracking-wide">Active</p>
+                  <p className="text-base font-semibold text-soft-text">
+                    {userEmail?.split("@")[0] || "User"}
+                  </p>
+                  <p className="text-xs text-soft-text-muted truncate max-w-[160px]">{userEmail || "user@example.com"}</p>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
 
+          {/* Block 4: Best Instructors */}
+          <div className="rounded-3xl border border-white/40 bg-white shadow-soft-sm">
             <BestInstructors />
           </div>
         </div>

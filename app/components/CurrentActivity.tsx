@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/app/components/ui/card";
-import { CheckCircle, Play, TrendingUp } from "lucide-react";
+import { CheckCircle, Play, TrendingUp, GraduationCap, Users } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const monthlyData = [
@@ -17,12 +17,12 @@ export function CurrentActivity() {
   return (
     <div className="space-y-4">
       {/* Monthly Progress Chart */}
-      <Card className="border-none bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-lg overflow-hidden">
+      <Card className="shadow-soft-sm overflow-hidden">
         <CardHeader className="pb-2">
-          <CardTitle className="text-xl font-bold text-white">
+          <CardTitle className="text-xl font-bold text-soft-text">
             Monthly Progress
           </CardTitle>
-          <CardDescription className="text-white/80 text-sm">
+          <CardDescription className="text-sm text-soft-text-muted">
             This is the latest improvement
           </CardDescription>
         </CardHeader>
@@ -32,26 +32,26 @@ export function CurrentActivity() {
             <LineChart data={monthlyData} margin={{ top: 5, right: 20, left: -10, bottom: 0 }}>
               <CartesianGrid 
                 strokeDasharray="3 3" 
-                stroke="rgba(255,255,255,0.1)" 
+                stroke="rgba(148,163,184,0.3)" 
                 vertical={false}
               />
               <XAxis 
                 dataKey="month" 
-                stroke="rgba(255,255,255,0.5)"
-                tick={{ fill: "rgba(255,255,255,0.8)", fontSize: 12 }}
-                axisLine={{ stroke: "rgba(255,255,255,0.2)" }}
+                stroke="rgba(148,163,184,0.6)"
+                tick={{ fill: "rgba(30,41,59,0.8)", fontSize: 12 }}
+                axisLine={{ stroke: "rgba(148,163,184,0.4)" }}
               />
               <YAxis 
-                stroke="rgba(255,255,255,0.5)"
-                tick={{ fill: "rgba(255,255,255,0.8)", fontSize: 12 }}
-                axisLine={{ stroke: "rgba(255,255,255,0.2)" }}
+                stroke="rgba(148,163,184,0.6)"
+                tick={{ fill: "rgba(30,41,59,0.8)", fontSize: 12 }}
+                axisLine={{ stroke: "rgba(148,163,184,0.4)" }}
               />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: "rgba(0,0,0,0.8)", 
+                  backgroundColor: "rgba(255,255,255,0.95)", 
                   border: "none",
                   borderRadius: "8px",
-                  color: "#fff",
+                  color: "#1e293b",
                   padding: "8px 12px",
                   fontSize: "12px"
                 }}
@@ -59,9 +59,9 @@ export function CurrentActivity() {
               <Line 
                 type="monotone" 
                 dataKey="hours" 
-                stroke="#fff" 
+                stroke="var(--brand-primary)" 
                 strokeWidth={3}
-                dot={{ fill: "#fff", r: 4 }}
+                dot={{ fill: "var(--brand-primary)", r: 4 }}
                 activeDot={{ r: 6 }}
               />
             </LineChart>
@@ -69,52 +69,54 @@ export function CurrentActivity() {
         </CardContent>
       </Card>
 
-      {/* Stats Cards - Side by Side */}
-      <div className="grid grid-cols-2 gap-4">
-        {/* Completed Courses */}
-        <Card className="border-none bg-linear-to-br from-blue-500 to-cyan-500 shadow-lg overflow-hidden">
-          <CardContent className="p-5">
-            <div className="space-y-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-                <CheckCircle className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-black text-white">45K+</p>
-                <p className="text-sm font-medium text-white/90 mt-1">Completed Courses</p>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/20 backdrop-blur-sm">
-                  <TrendingUp className="h-3 w-3 text-white" />
-                  <span className="text-xs font-bold text-white">+12%</span>
-                </div>
-                <span className="text-xs text-white/70">vs last month</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+    </div>
+  );
+}
 
-        {/* Video Courses */}
-        <Card className="border-none bg-linear-to-br from-violet-500 to-purple-500 shadow-lg overflow-hidden">
-          <CardContent className="p-5">
-            <div className="space-y-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-                <Play className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-black text-white">20K+</p>
-                <p className="text-sm font-medium text-white/90 mt-1">Video Courses</p>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/20 backdrop-blur-sm">
-                  <TrendingUp className="h-3 w-3 text-white" />
-                  <span className="text-xs font-bold text-white">+8%</span>
+const statsData = [
+  {
+    label: "Completed Courses",
+    value: "45K+",
+    icon: CheckCircle,
+  },
+  {
+    label: "Video Courses",
+    value: "20K+",
+    icon: Play,
+  },
+  {
+    label: "Students",
+    value: "50,000+",
+    icon: GraduationCap,
+  },
+  {
+    label: "Expert Mentors",
+    value: "500+",
+    icon: Users,
+  },
+] as const;
+
+export function ActivityStats() {
+  return (
+    <div className="grid gap-4 grid-cols-2 xl:grid-cols-4">
+      {statsData.map((stat) => {
+        const Icon = stat.icon;
+        return (
+          <Card key={stat.label} className="shadow-soft-sm overflow-hidden">
+            <CardContent className="p-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl soft-icon shrink-0">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <span className="text-xs text-white/70">vs last month</span>
+                <div className="min-w-0">
+                  <p className="text-xl font-black text-soft-text leading-tight">{stat.value}</p>
+                  <p className="text-xs font-medium text-soft-text-muted truncate">{stat.label}</p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }

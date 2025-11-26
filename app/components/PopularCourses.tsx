@@ -18,59 +18,46 @@ export function PopularCourses({ courses = [] }: PopularCoursesProps) {
       id: "1", 
       title: "Web Design", 
       slug: "web-design", 
-      description: "20+ Courses",
-      color: "from-yellow-400 to-orange-500",
-      bgColor: "bg-gradient-to-br from-yellow-400 to-orange-500"
+      description: "20+ Courses"
     },
     { 
       id: "2", 
       title: "UI/UX Design", 
       slug: "uiux-design", 
-      description: "38+ Courses",
-      color: "from-purple-400 to-pink-500",
-      bgColor: "bg-gradient-to-br from-purple-400 to-pink-500"
+      description: "38+ Courses"
     },
     { 
       id: "3", 
-      title: "UI/UX Design", 
-      slug: "uiux-design-2", 
-      description: "50+ Courses",
-      color: "from-red-400 to-rose-500",
-      bgColor: "bg-gradient-to-br from-red-400 to-rose-500"
+      title: "Product Strategy", 
+      slug: "product-strategy", 
+      description: "50+ Courses"
     },
     { 
       id: "4", 
-      title: "UI/UX Design", 
-      slug: "uiux-design-3", 
-      description: "18+ Courses",
-      color: "from-teal-400 to-cyan-500",
-      bgColor: "bg-gradient-to-br from-teal-400 to-cyan-500"
+      title: "Creative Coding", 
+      slug: "creative-coding", 
+      description: "18+ Courses"
     },
   ];
 
-  const getGradient = (index: number) => {
-    const gradients = [
-      { bg: "bg-gradient-to-br from-yellow-400 to-orange-500" },
-      { bg: "bg-gradient-to-br from-purple-400 to-pink-500" },
-      { bg: "bg-gradient-to-br from-red-400 to-rose-500" },
-      { bg: "bg-gradient-to-br from-teal-400 to-cyan-500" },
-      { bg: "bg-gradient-to-br from-blue-400 to-indigo-500" },
-      { bg: "bg-gradient-to-br from-green-400 to-emerald-500" }
-    ];
-    return gradients[index % gradients.length];
-  };
+  const accentTokens = [
+    { bg: "rgba(147, 61, 255, 0.12)", color: "#6b1cd8" },
+    { bg: "rgba(147, 61, 255, 0.18)", color: "#5010bf" },
+    { bg: "rgba(147, 61, 255, 0.1)", color: "#7a22ea" },
+    { bg: "rgba(147, 61, 255, 0.2)", color: "#4a169c" },
+  ];
 
   return (
-    <Card className="border border-slate-200 bg-white shadow-sm">
-      <CardHeader className="border-b border-slate-100 pb-4">
+    <Card>
+      <CardHeader className="pb-0">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-bold text-slate-900">
+          <CardTitle className="text-lg font-semibold text-soft-text">
             Popular Courses
           </CardTitle>
           <Button
             variant="ghost"
             size="sm"
-            className="gap-1 text-xs text-slate-600 hover:text-slate-900 h-8 px-2"
+            className="gap-1 text-xs text-soft-text-muted h-8 px-3"
           >
             {selectedFilter}
             <ChevronDown className="h-3 w-3" />
@@ -81,26 +68,29 @@ export function PopularCourses({ courses = [] }: PopularCoursesProps) {
       <CardContent className="p-4">
         <div className="space-y-3">
           {displayCourses.map((course, index) => {
-            const gradient = getGradient(index);
-            
+            const accent = accentTokens[index % accentTokens.length];
+
             return (
               <div
                 key={course.id}
-                className="group flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-200 hover:shadow-md transition-all duration-200"
+                className="group flex items-center gap-4 p-4 rounded-2xl bg-white shadow-soft-sm hover:shadow-soft hover:-translate-y-1 transition-all duration-300 ease-soft"
               >
                 {/* Icon Circle */}
-                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${gradient.bg} shadow-sm`}>
-                  <span className="text-lg font-bold text-white">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-[inset_0_1px_4px_rgba(255,255,255,0.6)]"
+                  style={{ backgroundColor: accent.bg, color: accent.color }}
+                >
+                  <span className="text-lg font-bold">
                     {course.title.charAt(0)}
                   </span>
                 </div>
 
                 {/* Course Info */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-sm text-slate-900 truncate mb-0.5">
+                  <h3 className="font-semibold text-sm text-soft-text truncate mb-0.5">
                     {course.title}
                   </h3>
-                  <p className="text-xs text-slate-500 truncate">
+                  <p className="text-xs text-soft-text-muted truncate">
                     {course.description}
                   </p>
                 </div>
@@ -110,7 +100,7 @@ export function PopularCourses({ courses = [] }: PopularCoursesProps) {
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="text-xs text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium h-8 px-3"
+                    className="text-xs text-soft-primary hover:text-soft-primary font-medium h-8 px-4"
                     asChild
                   >
                     <Link href={`/courses/${course.slug}`}>
@@ -120,7 +110,7 @@ export function PopularCourses({ courses = [] }: PopularCoursesProps) {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-8 w-8 text-slate-400 hover:text-slate-600"
+                    className="h-8 w-8 text-soft-text-muted hover:text-soft-primary"
                   >
                     <MoreVertical className="h-4 w-4" />
                   </Button>
@@ -131,9 +121,9 @@ export function PopularCourses({ courses = [] }: PopularCoursesProps) {
         </div>
 
         {/* View All Link */}
-        <Button 
-          variant="ghost" 
-          className="w-full mt-3 text-sm text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium"
+        <Button
+          variant="ghost"
+          className="w-full mt-3 text-sm text-soft-primary font-medium"
           asChild
         >
           <Link href="/courses">

@@ -25,16 +25,16 @@ export function BestInstructors({ instructors }: BestInstructorsProps) {
   ];
 
   return (
-    <Card className="border border-slate-200 bg-white shadow-sm">
-      <CardHeader className="border-b border-slate-100 pb-4">
+    <Card className="shadow-soft-sm">
+      <CardHeader className="border-b border-soft-border pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-bold text-slate-900">
+          <CardTitle className="text-lg font-bold text-soft-text">
             Best Instructors
           </CardTitle>
           <Button 
             variant="link" 
             size="sm" 
-            className="text-xs text-indigo-600 hover:text-indigo-700 font-semibold h-auto p-0"
+            className="text-xs text-brand hover:text-brand-hover font-semibold h-auto p-0"
             asChild
           >
             <Link href="/instructors">See All</Link>
@@ -47,7 +47,7 @@ export function BestInstructors({ instructors }: BestInstructorsProps) {
           {displayInstructors.map((instructor) => (
             <div
               key={instructor.id}
-              className="group flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-200 hover:shadow-md transition-all duration-200"
+              className="group flex items-center gap-3 p-3 rounded-xl border border-soft-border bg-white hover:border-brand/30 hover:shadow-soft-sm transition-all duration-300 ease-soft"
             >
               {/* Avatar with Status */}
               <div className="relative shrink-0">
@@ -57,10 +57,10 @@ export function BestInstructors({ instructors }: BestInstructorsProps) {
 
               {/* Instructor Info */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-slate-900 truncate mb-0.5">
+                <h3 className="font-semibold text-sm text-soft-text truncate mb-0.5">
                   {instructor.name}
                 </h3>
-                <p className="text-xs text-slate-500 truncate">
+                <p className="text-xs text-soft-text-muted truncate">
                   {instructor.courseCount} Design Courses
                 </p>
               </div>
@@ -69,7 +69,7 @@ export function BestInstructors({ instructors }: BestInstructorsProps) {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="shrink-0 border border-slate-300 text-xs text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 font-medium h-8 px-4"
+                className="shrink-0 border border-soft-border text-xs text-soft-text hover:bg-brand-surface hover:text-brand hover:border-brand/30 font-medium h-8 px-4"
                 asChild
               >
                 <Link href={`/instructors/${instructor.id}`}>
