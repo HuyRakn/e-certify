@@ -68,10 +68,10 @@
 	--card-foreground: 215 28% 17%;
 	--border: 215 25% 88%;
 	--input: 215 25% 90%;
-	--ring: 243 75% 58%;
+	--ring: 259 100% 62%;
 	--radius: 0.75rem;
 
-	--primary: 243 75% 58%;
+	--primary: 259 100% 62%;
 	--primary-foreground: 220 33% 98%;
 	--secondary: 230 40% 96%;
 	--secondary-foreground: 220 18% 35%;
@@ -148,6 +148,10 @@
 	p {
 		color: var(--soft-text-muted);
 	}
+	button,
+	[role="button"] {
+		cursor: pointer;
+	}
 	/* Logo protection - Prevent color filters on brand logo */
 	img[alt*="logo" i],
 	img[alt*="Logo" i],
@@ -205,6 +209,27 @@
 		min-height: 2.25rem !important;
 		padding-top: 0.35rem !important;
 		padding-bottom: 0.35rem !important;
+	}
+	.brand-solid {
+		background-color: var(--brand-primary) !important;
+		color: var(--brand-primary-foreground) !important;
+		transition: background-color 0.25s var(--transition-soft), transform 0.2s var(--transition-soft);
+	}
+	.brand-solid--inverted {
+		background-color: var(--brand-primary-foreground) !important;
+		color: var(--brand-primary) !important;
+		border: 1px solid var(--brand-primary) !important;
+	}
+	.brand-solid:hover,
+	.brand-solid--inverted:hover {
+		background-color: var(--brand-hover) !important;
+		color: var(--brand-primary-foreground) !important;
+		transform: translateY(-1px);
+	}
+	.brand-icon {
+		background-color: var(--brand-surface) !important;
+		color: var(--brand-primary) !important;
+		box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
 	}
 }
 
