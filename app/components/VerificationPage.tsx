@@ -112,7 +112,8 @@ const AnimatedLoader = () => (
   <motion.div
     animate={{ rotate: 360 }}
     transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-    className="h-16 w-16 text-blue-600"
+    className="h-16 w-16"
+    style={{ color: "var(--brand-primary)" }}
   >
     <Database className="h-full w-full" />
   </motion.div>
@@ -262,7 +263,7 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
             className="flex flex-col items-center justify-center py-24 space-y-4"
           >
             <AnimatedLoader />
-            <p className="text-xl font-semibold text-blue-900 mt-4">Verifying Credential...</p>
+            <p className="text-xl font-semibold mt-4" style={{ color: "var(--brand-primary)" }}>Verifying Credential...</p>
             <p className="text-base text-gray-600">Connecting to Solana blockchain</p>
           </motion.div>
         )}
@@ -366,7 +367,10 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
             <div className="flex gap-3">
               <Button
                 asChild
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 text-base font-semibold transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-blue-200"
+                className="w-full text-white h-12 text-base font-semibold transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
+                style={{ backgroundColor: "var(--brand-primary)" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--brand-hover)"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "var(--brand-primary)"}
               >
                 <a
                   href={`https://xray.helius.xyz/asset/${assetId}?network=devnet`}

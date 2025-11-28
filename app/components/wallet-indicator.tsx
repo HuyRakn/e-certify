@@ -13,7 +13,7 @@ export function WalletIndicator({ className, showButton = true }: WalletIndicato
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <WalletMultiButton className="bg-purple-600! hover:bg-purple-700! text-white! rounded-lg! h-9! px-4! text-sm! font-medium!" />
+      <WalletMultiButton className="wallet-button wallet-button--compact" />
     </div>
   );
 }

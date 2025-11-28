@@ -41,10 +41,10 @@ export function PopularCourses({ courses = [] }: PopularCoursesProps) {
   ];
 
   const accentTokens = [
-    { bg: "rgba(147, 61, 255, 0.12)", color: "#6b1cd8" },
-    { bg: "rgba(147, 61, 255, 0.18)", color: "#5010bf" },
-    { bg: "rgba(147, 61, 255, 0.1)", color: "#7a22ea" },
-    { bg: "rgba(147, 61, 255, 0.2)", color: "#4a169c" },
+    { bg: "rgba(124, 62, 255, 0.14)", color: "var(--brand-primary)" },
+    { bg: "rgba(124, 62, 255, 0.2)", color: "var(--brand-primary)" },
+    { bg: "rgba(124, 62, 255, 0.12)", color: "var(--brand-primary)" },
+    { bg: "rgba(124, 62, 255, 0.24)", color: "var(--brand-primary)" },
   ];
 
   return (
