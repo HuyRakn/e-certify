@@ -172,7 +172,7 @@ const Abstract3DModel: React.FC = () => {
 					color="#8B5CF6"
 					metalness={0.6}
 					roughness={0.2}
-					emissive="#4C1D95" // A darker purple emissive color
+					emissive="#6d2fdc" // Brand accent for 3D object glow
 					emissiveIntensity={0.5}
 				/>
 			</TorusKnot>
@@ -204,7 +204,7 @@ const Navigation: React.FC = () => {
 			<div className="container mx-auto px-6 h-full flex items-center justify-between">
 				<Link href="/" className="flex items-center gap-2 group">
 					<motion.div
-						className="h-10 w-10 rounded-xl bg-purple-600 flex items-center justify-center shadow-lg"
+						className="h-10 w-10 rounded-xl bg-brand flex items-center justify-center shadow-lg"
 						whileHover={{ scale: 1.1, rotate: -15 }}
 					>
 						<GraduationCap className="h-6 w-6 text-white" />
@@ -232,7 +232,7 @@ const Navigation: React.FC = () => {
 					<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 						<Button
 							asChild
-							className="bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md"
+							className="bg-brand hover:bg-brand/90 text-white font-medium shadow-md"
 						>
 							<Link href="/signup">Get started</Link>
 						</Button>
@@ -322,7 +322,7 @@ const FaqItem: React.FC<{ question: string; answer: string }> = ({
 					transition={{ duration: 0.3 }}
 				>
 					<ChevronDown
-						className={`h-6 w-6 text-purple-600 transition-transform ${
+						className={`h-6 w-6 text-brand transition-transform ${
 							isOpen ? "transform rotate-180" : ""
 						}`}
 					/>
@@ -365,7 +365,7 @@ export default function HomePage() {
 						variants={staggerContainer}
 					>
 						<motion.div variants={fadeInFromBottom}>
-							<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium">
+							<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--brand-surface)] text-brand text-sm font-medium">
 								<Award className="h-4 w-4" />
 								<span>Verifiable <span className="whitespace-nowrap">On-Chain</span> Certificates on Solana</span>
 							</div>
@@ -377,7 +377,7 @@ export default function HomePage() {
 						>
 							The New Standard
 							<br />
-							for <span className="text-purple-600 text-[2.4rem] md:text-[3.5rem] lg:text-[4.2rem] whitespace-nowrap">Verified Skills</span>
+							for <span className="text-brand text-[2.4rem] md:text-[3.5rem] lg:text-[4.2rem] whitespace-nowrap">Verified Skills</span>
 						</motion.h1>
 
 						<motion.p
@@ -402,7 +402,7 @@ export default function HomePage() {
 									<Button
 										asChild
 										size="lg"
-										className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-semibold text-lg px-8 py-6 shadow-lg"
+										className="w-full sm:w-auto bg-brand hover:bg-brand/90 text-white font-semibold text-lg px-8 py-6 shadow-lg"
 									>
 										<Link href="/signup" className="flex items-center justify-center">
 											Get Started Free
@@ -500,7 +500,7 @@ export default function HomePage() {
 					>
 						<Suspense
 							fallback={
-								<div className="h-full w-full flex items-center justify-center text-purple-600">
+								<div className="h-full w-full flex items-center justify-center text-brand">
 									Loading 3D Model...
 								</div>
 							}
@@ -574,8 +574,8 @@ export default function HomePage() {
 							className="p-8 text-center"
 							variants={fadeInFromBottom}
 						>
-							<div className="h-20 w-20 rounded-full bg-purple-100 flex items-center justify-center mb-6 mx-auto">
-								<BookOpen className="h-10 w-10 text-purple-600" />
+							<div className="h-20 w-20 rounded-full bg-[var(--brand-surface)] flex items-center justify-center mb-6 mx-auto">
+								<BookOpen className="h-10 w-10 text-brand" />
 							</div>
 							<h3 className="text-2xl font-bold text-gray-900 mb-2">
 								1. Enroll in a Course
@@ -589,8 +589,8 @@ export default function HomePage() {
 							className="p-8 text-center"
 							variants={fadeInFromBottom}
 						>
-							<div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mb-6 mx-auto">
-								<TrendingUp className="h-10 w-10 text-blue-600" />
+							<div className="h-20 w-20 rounded-full bg-[var(--brand-surface)] flex items-center justify-center mb-6 mx-auto">
+								<TrendingUp className="h-10 w-10 text-brand" />
 							</div>
 							<h3 className="text-2xl font-bold text-gray-900 mb-2">
 								2. Learn & Master
@@ -604,8 +604,8 @@ export default function HomePage() {
 							className="p-8 text-center"
 							variants={fadeInFromBottom}
 						>
-							<div className="h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center mb-6 mx-auto">
-								<ShieldCheck className="h-10 w-10 text-indigo-600" />
+							<div className="h-20 w-20 rounded-full bg-[var(--brand-surface)] flex items-center justify-center mb-6 mx-auto">
+								<ShieldCheck className="h-10 w-10 text-brand" />
 							</div>
 							<h3 className="text-2xl font-bold text-gray-900 mb-2 whitespace-nowrap">
 								3. Get Verified On-Chain
@@ -632,7 +632,7 @@ export default function HomePage() {
 						variants={fadeInFromBottom}
 					>
 						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
-							Why Choose <span className="text-purple-600">E-Certify?</span>
+							Why Choose <span className="text-brand">E-Certify?</span>
 						</h2>
 						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
 							Everything you need to learn, grow, and prove your skills
@@ -644,7 +644,7 @@ export default function HomePage() {
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
-							<div className="h-14 w-14 rounded-xl bg-purple-600 flex items-center justify-center mb-4">
+							<div className="h-14 w-14 rounded-xl bg-brand flex items-center justify-center mb-4">
 								<ShieldCheck className="h-7 w-7 text-white" />
 							</div>
 							<h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -660,7 +660,7 @@ export default function HomePage() {
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
-							<div className="h-14 w-14 rounded-xl bg-blue-600 flex items-center justify-center mb-4">
+							<div className="h-14 w-14 rounded-xl bg-brand flex items-center justify-center mb-4">
 								<TrendingUp className="h-7 w-7 text-white" />
 							</div>
 							<h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -676,7 +676,7 @@ export default function HomePage() {
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
-							<div className="h-14 w-14 rounded-xl bg-indigo-600 flex items-center justify-center mb-4">
+							<div className="h-14 w-14 rounded-xl bg-brand flex items-center justify-center mb-4">
 								<Users className="h-7 w-7 text-white" />
 							</div>
 							<h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -729,7 +729,7 @@ export default function HomePage() {
 									</div>
 									<div className="p-6 space-y-4">
 										<div className="flex items-center justify-between">
-											<span className="inline-block px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-medium">
+											<span className="inline-block px-3 py-1 rounded-full bg-[var(--brand-surface)] text-brand text-xs font-medium">
 												{course.category}
 											</span>
 											<div className="flex items-center gap-1 text-yellow-500">
@@ -739,7 +739,7 @@ export default function HomePage() {
 												</span>
 											</div>
 										</div>
-										<h3 className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
+										<h3 className="text-xl font-bold text-gray-900 group-hover:text-brand transition-colors">
 											{course.title}
 										</h3>
 										<div className="flex items-center justify-between text-sm text-gray-600 border-t border-gray-100 pt-4">
@@ -785,7 +785,7 @@ export default function HomePage() {
 						variants={fadeInFromBottom}
 					>
 						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
-							What Our <span className="text-purple-600">Students Say</span>
+							What Our <span className="text-brand">Students Say</span>
 						</h2>
 						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
 							Real feedback from learners across the APEC ecosystem.
@@ -867,7 +867,7 @@ export default function HomePage() {
 					variants={fadeInFromBottom}
 					viewport={{ once: true, amount: 0.5 }}
 				>
-					<div className="p-12 rounded-3xl bg-purple-600 text-white text-center shadow-2xl relative overflow-hidden">
+					<div className="p-12 rounded-3xl bg-brand text-white text-center shadow-2xl relative overflow-hidden">
 						<div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full" />
 						<div className="absolute -bottom-20 -left-10 w-52 h-52 bg-white/10 rounded-full" />
 						<div className="relative z-10">
@@ -886,7 +886,7 @@ export default function HomePage() {
 								<Button
 									asChild
 									size="lg"
-									className="bg-white text-purple-600 hover:bg-gray-100 font-semibold text-lg px-8 py-6 shadow-lg"
+									className="bg-white text-brand hover:bg-gray-100 font-semibold text-lg px-8 py-6 shadow-lg"
 								>
 									<Link href="/signup">
 										Create Free Account
@@ -909,7 +909,7 @@ export default function HomePage() {
 			>
 				<div className="flex flex-col md:flex-row items-center justify-between gap-8">
 					<div className="flex items-center gap-2">
-						<div className="h-8 w-8 rounded-lg bg-purple-600 flex items-center justify-center">
+						<div className="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
 							<GraduationCap className="h-5 w-5 text-white" />
 						</div>
 						<span className="text-lg font-semibold text-gray-900">
@@ -917,16 +917,16 @@ export default function HomePage() {
 						</span>
 					</div>
 					<div className="flex flex-wrap justify-center gap-6 text-gray-600 font-medium">
-						<Link href="#features" className="hover:text-purple-600">
+						<Link href="#features" className="hover:text-brand">
 							Features
 						</Link>
-						<Link href="#courses" className="hover:text-purple-600">
+						<Link href="#courses" className="hover:text-brand">
 							Courses
 						</Link>
-						<Link href="#faq" className="hover:text-purple-600">
+						<Link href="#faq" className="hover:text-brand">
 							FAQ
 						</Link>
-						<Link href="#" className="hover:text-purple-600">
+						<Link href="#" className="hover:text-brand">
 							Contact
 						</Link>
 					</div>

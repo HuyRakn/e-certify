@@ -113,7 +113,7 @@ export default function SkillsPassport({ ownerBase58 }: SkillsPassportProps) {
       <Card>
         <CardContent className="py-16">
           <div className="flex flex-col items-center justify-center space-y-4">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-brand" />
             <p className="text-sm font-medium">Loading Skills Passport...</p>
             <p className="text-xs text-muted-foreground">Fetching credentials from blockchain</p>
           </div>
@@ -141,7 +141,7 @@ export default function SkillsPassport({ ownerBase58 }: SkillsPassportProps) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <ShieldCheck className="h-6 w-6 text-purple-600" />
+            <ShieldCheck className="h-6 w-6 text-brand" />
             My Skills Passport
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -200,8 +200,8 @@ function CredentialCard({ asset }: { asset: DasAsset }) {
               </Badge>
             )}
           </div>
-          <div className="h-10 w-10 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
-            <Award className="h-5 w-5 text-purple-600" />
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--brand-surface)" }}>
+            <Award className="h-5 w-5 text-brand" />
           </div>
         </div>
       </CardHeader>

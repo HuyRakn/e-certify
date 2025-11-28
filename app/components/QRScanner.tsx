@@ -140,8 +140,8 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
                   },
                 }}
               />
-              <div className="absolute inset-0 border-4 border-purple-500 rounded-lg pointer-events-none">
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-purple-400 rounded"></div>
+              <div className="absolute inset-0 border-4 border-brand rounded-lg pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-brand/70 rounded"></div>
               </div>
             </div>
             <div className="text-center text-sm text-muted-foreground">

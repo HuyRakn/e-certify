@@ -19,7 +19,7 @@ interface PlatformHeaderProps {
 function AddressCard() {
     return (
         <div className="hidden sm:flex items-center">
-            <WalletMultiButton />
+            <WalletMultiButton className="wallet-button wallet-button--compact" />
         </div>
     );
 }

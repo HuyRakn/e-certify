@@ -62,7 +62,7 @@ export function CurrentActivity() {
                 stroke="var(--brand-primary)" 
                 strokeWidth={3}
                 dot={{ fill: "var(--brand-primary)", r: 4 }}
-                activeDot={{ r: 6 }}
+                activeDot={{ r: 6, fill: "var(--brand-primary)" }}
               />
             </LineChart>
           </ResponsiveContainer>
