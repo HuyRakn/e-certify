@@ -7,7 +7,7 @@ const colors = [
   "bg-secondary",
   "bg-accent",
   "bg-green-500",
-  "bg-brand",
+  "brand-solid",
 ];
 
 export function ProgressBars() {

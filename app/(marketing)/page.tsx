@@ -204,7 +204,7 @@ const Navigation: React.FC = () => {
 			<div className="container mx-auto px-6 h-full flex items-center justify-between">
 				<Link href="/" className="flex items-center gap-2 group">
 					<motion.div
-						className="h-10 w-10 rounded-xl bg-brand flex items-center justify-center shadow-lg"
+						className="h-10 w-10 rounded-xl brand-solid flex items-center justify-center shadow-lg"
 						whileHover={{ scale: 1.1, rotate: -15 }}
 					>
 						<GraduationCap className="h-6 w-6 text-white" />
@@ -232,7 +232,7 @@ const Navigation: React.FC = () => {
 					<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 						<Button
 							asChild
-							className="bg-brand hover:bg-brand/90 text-white font-medium shadow-md"
+							className="brand-solid font-medium shadow-md"
 						>
 							<Link href="/signup">Get started</Link>
 						</Button>
@@ -402,7 +402,7 @@ export default function HomePage() {
 									<Button
 										asChild
 										size="lg"
-										className="w-full sm:w-auto bg-brand hover:bg-brand/90 text-white font-semibold text-lg px-8 py-6 shadow-lg"
+										className="brand-solid w-full sm:w-auto text-white font-semibold text-lg px-8 py-6 shadow-lg"
 									>
 										<Link href="/signup" className="flex items-center justify-center">
 											Get Started Free
@@ -644,7 +644,7 @@ export default function HomePage() {
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
-							<div className="h-14 w-14 rounded-xl bg-brand flex items-center justify-center mb-4">
+							<div className="h-14 w-14 rounded-xl brand-solid flex items-center justify-center mb-4">
 								<ShieldCheck className="h-7 w-7 text-white" />
 							</div>
 							<h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -660,7 +660,7 @@ export default function HomePage() {
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
-							<div className="h-14 w-14 rounded-xl bg-brand flex items-center justify-center mb-4">
+							<div className="h-14 w-14 rounded-xl brand-solid flex items-center justify-center mb-4">
 								<TrendingUp className="h-7 w-7 text-white" />
 							</div>
 							<h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -676,7 +676,7 @@ export default function HomePage() {
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
-							<div className="h-14 w-14 rounded-xl bg-brand flex items-center justify-center mb-4">
+							<div className="h-14 w-14 rounded-xl brand-solid flex items-center justify-center mb-4">
 								<Users className="h-7 w-7 text-white" />
 							</div>
 							<h3 className="text-xl font-bold text-gray-900 mb-2">
@@ -867,11 +867,11 @@ export default function HomePage() {
 					variants={fadeInFromBottom}
 					viewport={{ once: true, amount: 0.5 }}
 				>
-					<div className="p-12 rounded-3xl bg-brand text-white text-center shadow-2xl relative overflow-hidden">
+					<div className="p-12 rounded-3xl brand-solid text-center shadow-2xl relative overflow-hidden">
 						<div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full" />
 						<div className="absolute -bottom-20 -left-10 w-52 h-52 bg-white/10 rounded-full" />
 						<div className="relative z-10">
-							<h2 className="text-4xl md:text-5xl font-bold mb-4">
+							<h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
 								Ready to Start Learning?
 							</h2>
 							<p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
@@ -886,7 +886,7 @@ export default function HomePage() {
 								<Button
 									asChild
 									size="lg"
-									className="bg-white text-brand hover:bg-gray-100 font-semibold text-lg px-8 py-6 shadow-lg"
+									className="brand-solid--inverted font-semibold text-lg px-8 py-6 shadow-lg"
 								>
 									<Link href="/signup">
 										Create Free Account
@@ -909,7 +909,7 @@ export default function HomePage() {
 			>
 				<div className="flex flex-col md:flex-row items-center justify-between gap-8">
 					<div className="flex items-center gap-2">
-						<div className="h-8 w-8 rounded-lg bg-brand flex items-center justify-center">
+						<div className="h-8 w-8 rounded-lg brand-solid flex items-center justify-center">
 							<GraduationCap className="h-5 w-5 text-white" />
 						</div>
 						<span className="text-lg font-semibold text-gray-900">
