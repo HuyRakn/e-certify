@@ -40,7 +40,12 @@ export default function ClientPlatformLayout({ userRole, userEmail, children }: 
                 <div className="hidden lg:flex border-t border-white/30 bg-transparent shrink-0 flex-col gap-4">
                     {userRole === 'student' && (
                         <div className="p-4">
-                            <Card className="border border-white/40 bg-white/85 shadow-soft text-soft-text">
+                            <Card 
+                                className="border-2 border-white/80 bg-white backdrop-blur-sm text-soft-text hover:scale-[1.02] transition-all duration-300"
+                                style={{ 
+                                    boxShadow: '0 24px 50px rgba(15, 23, 42, 0.14), 0 10px 30px rgba(79, 70, 229, 0.15)',
+                                }}
+                            >
                                 <CardContent className="p-4">
                                     <div className="mb-3 flex items-center justify-center">
                                         <div

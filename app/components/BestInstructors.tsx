@@ -26,7 +26,7 @@ export function BestInstructors({ instructors }: BestInstructorsProps) {
 
   return (
     <Card className="shadow-soft-sm">
-      <CardHeader className="border-b border-soft-border pb-4">
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-bold text-soft-text">
             Best Instructors
