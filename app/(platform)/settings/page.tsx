@@ -76,10 +76,10 @@ export default function SettingsPage() {
       <div className="mx-auto max-w-[1600px] space-y-6 p-6 md:p-8 lg:p-10">
         {/* Page Header */}
         <div className="space-y-1">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+          <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
             My Settings
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-soft-text-muted">
             Manage your account settings and preferences
           </p>
         </div>
@@ -89,10 +89,10 @@ export default function SettingsPage() {
           {/* Left Column - Profile */}
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Information */}
-            <Card className="border border-slate-200 bg-white shadow-sm">
+            <Card className="border border-soft-border bg-white shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5 text-slate-700" />
+                  <User className="h-5 w-5 text-soft-text" />
                   Profile Information
                 </CardTitle>
                 <CardDescription>
@@ -100,15 +100,15 @@ export default function SettingsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="flex items-center gap-6 pb-6 border-b border-slate-100">
+                <div className="flex items-center gap-6 pb-6 border-b border-soft-border">
                   <UserAvatar value={email || "user"} size={80} />
                   <div>
-                    <h3 className="text-lg font-semibold text-purple-600">
+                    <h3 className="text-lg font-semibold text-brand">
                       {fullName || email?.split("@")[0] || "User"}
                     </h3>
-                    <p className="text-sm text-slate-600">{email}</p>
+                    <p className="text-sm text-soft-text-muted">{email}</p>
                     <div className="mt-2">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 capitalize">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[var(--brand-surface)] text-brand capitalize">
                         {role || "student"}
                       </span>
                     </div>
@@ -117,7 +117,7 @@ export default function SettingsPage() {
 
     <div className="space-y-4">
                   <div className="space-y-2">
-                    <label htmlFor="fullName" className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                    <label htmlFor="fullName" className="text-sm font-medium text-soft-text flex items-center gap-2">
                       <User className="h-4 w-4" />
                       Full Name
                     </label>
@@ -130,7 +130,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                    <label htmlFor="email" className="text-sm font-medium text-soft-text flex items-center gap-2">
                       <Mail className="h-4 w-4" />
                       Email Address
                     </label>
@@ -138,13 +138,13 @@ export default function SettingsPage() {
                       id="email"
                       value={email}
                       disabled
-                      className="bg-slate-50"
+                      className="bg-soft-surface-muted"
                     />
-                    <p className="text-xs text-slate-500">Email cannot be changed</p>
+                    <p className="text-xs text-soft-text-muted">Email cannot be changed</p>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="role" className="text-sm font-medium text-slate-700 flex items-center gap-2">
+                    <label htmlFor="role" className="text-sm font-medium text-soft-text flex items-center gap-2">
                       <ShieldCheck className="h-4 w-4" />
                       Account Role
                     </label>
@@ -152,9 +152,9 @@ export default function SettingsPage() {
                       id="role"
                       value={role ? role.charAt(0).toUpperCase() + role.slice(1) : ""}
                       disabled
-                      className="bg-slate-50 capitalize"
+                      className="bg-soft-surface-muted capitalize"
                     />
-                    <p className="text-xs text-slate-500">Role is managed by administrators</p>
+                    <p className="text-xs text-soft-text-muted">Role is managed by administrators</p>
                   </div>
 
                   <Button onClick={updateProfile} className="mt-4">
@@ -165,10 +165,10 @@ export default function SettingsPage() {
             </Card>
 
             {/* Security Settings */}
-            <Card className="border border-slate-200 bg-white shadow-sm">
+            <Card className="border border-soft-border bg-white shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Key className="h-5 w-5 text-slate-700" />
+                  <Key className="h-5 w-5 text-soft-text" />
                   Security
                 </CardTitle>
                 <CardDescription>
@@ -180,7 +180,7 @@ export default function SettingsPage() {
                   <Key className="mr-2 h-4 w-4" />
                   Change Password
                 </Button>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-soft-text-muted">
                   Update your password to keep your account secure
                 </p>
               </CardContent>
@@ -190,60 +190,60 @@ export default function SettingsPage() {
           {/* Right Column - Quick Actions */}
           <div className="space-y-6">
             {/* Preferences */}
-            <Card className="border border-slate-200 bg-white shadow-sm">
+            <Card className="border border-soft-border bg-white shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bell className="h-5 w-5 text-slate-700" />
+                  <Bell className="h-5 w-5 text-soft-text" />
                   Preferences
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div className="flex items-center justify-between pb-3 border-b border-soft-border">
                   <div>
-                    <p className="text-sm font-medium text-slate-900">Email Notifications</p>
-                    <p className="text-xs text-slate-500">Receive updates via email</p>
+                    <p className="text-sm font-medium text-soft-text">Email Notifications</p>
+                    <p className="text-xs text-soft-text-muted">Receive updates via email</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" className="sr-only peer" defaultChecked />
-                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    <div className="w-11 h-6 bg-soft-surface-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-soft-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand"></div>
                   </label>
                 </div>
                 <div className="flex items-center justify-between pt-3">
                   <div>
-                    <p className="text-sm font-medium text-slate-900">Course Updates</p>
-                    <p className="text-xs text-slate-500">Get notified about new courses</p>
+                    <p className="text-sm font-medium text-soft-text">Course Updates</p>
+                    <p className="text-xs text-soft-text-muted">Get notified about new courses</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" className="sr-only peer" defaultChecked />
-                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    <div className="w-11 h-6 bg-soft-surface-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-soft-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand"></div>
                   </label>
                 </div>
               </CardContent>
             </Card>
 
             {/* Account Info */}
-            <Card className="border border-slate-200 bg-white shadow-sm">
+            <Card className="border border-soft-border bg-white shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Globe className="h-5 w-5 text-slate-700" />
+                  <Globe className="h-5 w-5 text-soft-text" />
                   Account Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex justify-between items-center pb-2 border-b border-slate-100">
-                  <span className="text-sm text-slate-600">Member since</span>
-                  <span className="text-sm font-medium text-slate-900">
+                <div className="flex justify-between items-center pb-2 border-b border-soft-border">
+                  <span className="text-sm text-soft-text-muted">Member since</span>
+                  <span className="text-sm font-medium text-soft-text">
                     {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                <div className="flex justify-between items-center pb-2 border-b border-slate-100">
-                  <span className="text-sm text-slate-600">Account status</span>
+                <div className="flex justify-between items-center pb-2 border-b border-soft-border">
+                  <span className="text-sm text-soft-text-muted">Account status</span>
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                     Active
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-600">Verification</span>
+                  <span className="text-sm text-soft-text-muted">Verification</span>
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                     Verified
                   </span>
@@ -256,3 +256,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+

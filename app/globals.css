@@ -141,7 +141,13 @@
 		font-feature-settings: "liga" 1, "calt" 0;
 		-webkit-font-smoothing: antialiased;
 		text-rendering: optimizeLegibility;
+		/* Prevent hyphenated words from breaking across lines */
+		hyphens: none;
+		word-break: normal;
+		overflow-wrap: break-word;
 	}
+	/* Prevent words with hyphens from breaking across lines */
+	/* Note: CSS cannot automatically detect hyphenated words, so we use a utility class */
 	h1, h2, h3, h4, h5, h6 {
 		color: var(--soft-text);
 	}
@@ -246,5 +252,9 @@
     }
     .group-hover\:pause-animation:hover {
         animation-play-state: paused;
+    }
+    /* Utility class to prevent hyphenated words from breaking */
+    .no-hyphen-break {
+        white-space: nowrap;
     }
 }

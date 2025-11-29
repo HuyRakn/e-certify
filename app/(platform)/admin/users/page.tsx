@@ -131,7 +131,7 @@ export default function AdminUsersPage() {
       case 'admin':
         return 'bg-red-100 text-red-800 border-red-300';
       case 'teacher':
-        return 'bg-blue-100 text-blue-800 border-blue-300';
+        return 'bg-[var(--brand-surface)] text-brand border-brand/30';
       default:
         return 'bg-green-100 text-green-800 border-green-300';
     }
@@ -143,10 +143,10 @@ export default function AdminUsersPage() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+            <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
               User Management
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-soft-text-muted">
               Manage platform users and assign roles
             </p>
           </div>
@@ -286,4 +286,5 @@ export default function AdminUsersPage() {
     </div>
   );
 }
+
 

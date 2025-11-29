@@ -32,8 +32,8 @@ export default function VerifyPage() {
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-4xl p-6 md:p-8 lg:p-10">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Credential Verification</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-soft-text">Credential Verification</h1>
+          <p className="text-soft-text-muted mt-2">
             Instant verification of on-chain certificates - Scan QR code or enter Asset ID
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function VerifyPage() {
                           // VerificationPage will verify automatically when assetId changes
                         }
                       }}
-                      className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+                      className="w-full px-4 py-2 bg-brand text-white rounded-lg hover:bg-[var(--brand-hover)]"
                       disabled={!assetId.trim()}
                     >
                       Verify Credential
@@ -100,4 +100,5 @@ export default function VerifyPage() {
     </div>
   );
 }
+
 

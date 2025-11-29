@@ -12,7 +12,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={`rounded-xl border bg-white text-gray-900 shadow-lg ${className}`}
+      className={`rounded-xl border bg-white text-soft-text shadow-lg ${className}`}
       {...props}
     />
 ));
@@ -36,7 +36,7 @@ CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={`text-sm text-gray-600 ${className}`} {...props} />
+    <p ref={ref} className={`text-sm text-soft-text-muted ${className}`} {...props} />
 ));
 CardDescription.displayName = "CardDescription";
 
@@ -51,7 +51,7 @@ const Badge = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEleme
     <div
       ref={ref}
       className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
-        variant === 'outline' ? 'text-gray-700 border-gray-300' : 'bg-gray-100 text-gray-800'
+        variant === 'outline' ? 'text-soft-text border-soft-border' : 'bg-soft-surface-muted text-soft-text'
       } ${className}`}
       {...props}
     />
@@ -264,7 +264,7 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
           >
             <AnimatedLoader />
             <p className="text-xl font-semibold mt-4" style={{ color: "var(--brand-primary)" }}>Verifying Credential...</p>
-            <p className="text-base text-gray-600">Connecting to Solana blockchain</p>
+            <p className="text-base text-soft-text-muted">Connecting to Solana blockchain</p>
           </motion.div>
         )}
 
@@ -288,7 +288,7 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
 
             {/* --- BẮT ĐẦU REFACTOR UI --- */}
             {/* Credential Details Card */}
-            <Card className="border-gray-200">
+            <Card className="border-soft-border">
               <CardHeader>
                 <CardTitle>Credential Details</CardTitle>
                 <CardDescription>On-chain certificate information</CardDescription>
@@ -298,8 +298,8 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
                 
                 {/* Thông tin chính */}
                 <div>
-                  <label className="text-sm font-medium text-gray-500 uppercase tracking-wide">Credential Name</label>
-                  <p className="text-2xl font-bold mt-1 text-gray-900">
+                  <label className="text-sm font-medium text-soft-text-muted uppercase tracking-wide">Credential Name</label>
+                  <p className="text-2xl font-bold mt-1 text-soft-text">
                     {asset.content?.metadata?.name || 'Credential'}
                   </p>
                 </div>
@@ -307,18 +307,18 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
                 {/* Thông tin phụ (Grid) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {asset.content?.metadata?.symbol && (
-                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                      <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Symbol</label>
-                      <Badge variant="outline" className="mt-2 text-sm border-gray-300">
+                    <div className="p-4 bg-soft-surface-muted rounded-lg border border-soft-border">
+                      <label className="text-xs font-medium text-soft-text-muted uppercase tracking-wide">Symbol</label>
+                      <Badge variant="outline" className="mt-2 text-sm border-soft-border">
                         {asset.content.metadata.symbol}
                       </Badge>
                     </div>
                   )}
 
                   {asset.ownership?.owner && (
-                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 min-w-0">
-                      <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Owner Wallet</label>
-                      <p className="text-sm mt-2 font-mono text-gray-700 break-all">{asset.ownership.owner}</p>
+                    <div className="p-4 bg-soft-surface-muted rounded-lg border border-soft-border min-w-0">
+                      <label className="text-xs font-medium text-soft-text-muted uppercase tracking-wide">Owner Wallet</label>
+                      <p className="text-sm mt-2 font-mono text-soft-text break-all">{asset.ownership.owner}</p>
                     </div>
                   )}
                 </div>
@@ -326,14 +326,14 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
                 {/* Phần Thuộc tính (Attributes) (Grid) */}
                 {asset.content?.metadata?.attributes && asset.content.metadata.attributes.length > 0 && (
                   <div>
-                    <label className="text-base font-semibold text-gray-900 mb-3 block">
+                    <label className="text-base font-semibold text-soft-text mb-3 block">
                       Attributes
                     </label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {asset.content.metadata.attributes.map((attr, index) => (
-                        <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                          <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{attr.trait_type}</p>
-                          <p className="text-base font-semibold text-gray-900 mt-1">{attr.value}</p>
+                        <div key={index} className="p-4 bg-soft-surface-muted rounded-lg border border-soft-border">
+                          <p className="text-xs font-medium text-soft-text-muted uppercase tracking-wide">{attr.trait_type}</p>
+                          <p className="text-base font-semibold text-soft-text mt-1">{attr.value}</p>
                         </div>
                       ))}
                     </div>
@@ -343,7 +343,7 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
                 {/* Phần Bằng chứng (Verification Proof) */}
                 {proof && (
                   <div>
-                    <label className="text-base font-semibold text-gray-900 mb-3 block">
+                    <label className="text-base font-semibold text-soft-text mb-3 block">
                       Verification Proof
                     </label>
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200 text-xs font-mono break-all space-y-2">
@@ -412,7 +412,7 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
               )}
             </div>
             {assetId && (
-              <div className="mt-4 p-3 bg-gray-100 rounded text-xs font-mono border border-gray-200">
+              <div className="mt-4 p-3 bg-soft-surface-muted rounded text-xs font-mono border border-soft-border">
                 Asset ID: {assetId}
               </div>
             )}
@@ -423,7 +423,7 @@ export default function VerificationPage({ assetId }: VerificationPageProps) {
   };
 
   return (
-    <Card className="shadow-lg border-2 border-gray-100 bg-white">
+    <Card className="shadow-lg border-2 border-soft-border bg-white">
       <CardContent className="pt-6">
         {renderContent()}
       </CardContent>

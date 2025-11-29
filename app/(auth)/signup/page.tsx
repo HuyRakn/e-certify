@@ -59,15 +59,15 @@ export default function SignUpPage() {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-soft-surface-muted p-4">
       <div className="w-full max-w-md space-y-6">
         {/* Logo and Title */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-purple-600 shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-brand shadow-lg mb-4">
             <GraduationCap className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Create your account</h1>
-          <p className="text-gray-600">Join E-Certify and start your learning journey</p>
+          <h1 className="text-3xl font-bold text-soft-text">Create your account</h1>
+          <p className="text-soft-text-muted">Join E-Certify and start your learning journey</p>
         </div>
 
         {/* Signup Card */}
@@ -83,17 +83,17 @@ export default function SignUpPage() {
                   <Mail className="h-8 w-8 text-green-600" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-gray-900">Check your email</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-lg font-semibold text-soft-text">Check your email</h3>
+                  <p className="text-sm text-soft-text-muted">
                     We sent a verification link to <span className="font-medium">{email}</span>
                   </p>
-                  <p className="text-sm text-gray-500">Please check your inbox and click the link to verify your account.</p>
+                  <p className="text-sm text-soft-text-muted">Please check your inbox and click the link to verify your account.</p>
                 </div>
               </div>
             ) : (
               <form onSubmit={signUp} className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="fullName" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <label htmlFor="fullName" className="text-sm font-medium text-soft-text flex items-center gap-2">
                     <UserCheck className="h-4 w-4" />
                     Full Name (Optional)
                   </label>
@@ -108,7 +108,7 @@ export default function SignUpPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <label htmlFor="email" className="text-sm font-medium text-soft-text flex items-center gap-2">
                     <Mail className="h-4 w-4" />
                     Email
                   </label>
@@ -124,7 +124,7 @@ export default function SignUpPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <label htmlFor="password" className="text-sm font-medium text-soft-text flex items-center gap-2">
                     <Lock className="h-4 w-4" />
                     Password
                   </label>
@@ -138,11 +138,11 @@ export default function SignUpPage() {
                     required
                     minLength={6}
                   />
-                  <p className="text-xs text-gray-500">Must be at least 6 characters long</p>
+                  <p className="text-xs text-soft-text-muted">Must be at least 6 characters long</p>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Choose your role</label>
+                  <label className="text-sm font-medium text-soft-text">Choose your role</label>
                   <div className="grid grid-cols-2 gap-2">
                     {roleOptions.map((option) => (
                       <button
@@ -151,12 +151,12 @@ export default function SignUpPage() {
                         onClick={() => setRole(option.value)}
                         className={`p-3 rounded-lg border-2 transition-all text-center ${
                           role === option.value
-                            ? "border-purple-600 bg-purple-50 text-purple-700"
-                            : "border-gray-200 hover:border-gray-300 text-gray-700"
+                            ? "border-brand bg-[var(--brand-surface)] text-brand"
+                            : "border-soft-border hover:border-soft-border text-soft-text"
                         }`}
                       >
                         <div className="text-xs font-semibold mb-1">{option.label}</div>
-                        <div className="text-[10px] text-gray-500">{option.desc}</div>
+                        <div className="text-[10px] text-soft-text-muted">{option.desc}</div>
                       </button>
                     ))}
                   </div>
@@ -170,7 +170,7 @@ export default function SignUpPage() {
 
                 <Button 
                   type="submit" 
-                  className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md" 
+                  className="w-full h-11 bg-brand hover:bg-[var(--brand-hover)] text-white font-medium shadow-md" 
                   disabled={!email || !password || loading}
                 >
                   {loading ? (
@@ -186,13 +186,13 @@ export default function SignUpPage() {
             )}
           </CardContent>
           <CardFooter className="flex flex-col gap-3 pt-4 border-t">
-            <p className="text-sm text-gray-600 text-center">
+            <p className="text-sm text-soft-text-muted text-center">
               Already have an account?{" "}
-              <Link href="/login" className="text-purple-600 hover:text-purple-700 font-medium hover:underline">
+              <Link href="/login" className="text-brand hover:text-[var(--brand-hover)] font-medium hover:underline">
                 Sign in
               </Link>
             </p>
-            <Link href="/" className="text-sm text-gray-500 hover:text-gray-700 text-center">
+            <Link href="/" className="text-sm text-soft-text-muted hover:text-soft-text text-center">
               ← Back to home
             </Link>
           </CardFooter>
@@ -201,3 +201,4 @@ export default function SignUpPage() {
     </div>
   );
 }
+

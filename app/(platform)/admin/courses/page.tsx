@@ -130,14 +130,14 @@ export default function AdminCourseManagementPage() {
         {/* Page Header */}
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-purple-100 flex items-center justify-center">
-              <BookCopy className="h-6 w-6 text-purple-600" />
+            <div className="h-12 w-12 rounded-xl bg-[var(--brand-surface)] flex items-center justify-center">
+              <BookCopy className="h-6 w-6 text-brand" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+              <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
                 Course Management
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-soft-text-muted mt-1">
                 Review and manage all courses on the platform
               </p>
             </div>
@@ -146,49 +146,49 @@ export default function AdminCourseManagementPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Total Courses</CardTitle>
-              <BookCopy className="h-4 w-4 text-slate-400" />
+              <CardTitle className="text-sm font-medium text-soft-text">Total Courses</CardTitle>
+              <BookCopy className="h-4 w-4 text-soft-text-muted" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">{stats.totalCourses}</div>
+              <div className="text-2xl font-bold text-soft-text">{stats.totalCourses}</div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Published</CardTitle>
+              <CardTitle className="text-sm font-medium text-soft-text">Published</CardTitle>
               <CheckCircle2 className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">{stats.publishedCourses}</div>
+              <div className="text-2xl font-bold text-soft-text">{stats.publishedCourses}</div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Pending Review</CardTitle>
+              <CardTitle className="text-sm font-medium text-soft-text">Pending Review</CardTitle>
               <XCircle className="h-4 w-4 text-yellow-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">{stats.pendingCourses}</div>
+              <div className="text-2xl font-bold text-soft-text">{stats.pendingCourses}</div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Platform Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-slate-400" />
+              <CardTitle className="text-sm font-medium text-soft-text">Platform Revenue</CardTitle>
+              <DollarSign className="h-4 w-4 text-soft-text-muted" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">${stats.totalRevenue.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-soft-text">${stats.totalRevenue.toFixed(2)}</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Search Bar */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
+        <Card className="border border-soft-border bg-white shadow-sm">
           <CardContent className="p-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-soft-text-muted" />
               <Input
                 type="search"
                 placeholder="Search courses by title, description, or instructor..."
@@ -201,7 +201,7 @@ export default function AdminCourseManagementPage() {
         </Card>
 
         {/* Courses Table */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
+        <Card className="border border-soft-border bg-white shadow-sm">
           <CardHeader>
             <CardTitle>All Courses ({filteredCourses.length})</CardTitle>
             <CardDescription>
@@ -211,42 +211,42 @@ export default function AdminCourseManagementPage() {
           <CardContent>
             {loading ? (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
-                <p className="mt-4 text-sm text-slate-600">Loading courses...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand mx-auto"></div>
+                <p className="mt-4 text-sm text-soft-text-muted">Loading courses...</p>
               </div>
             ) : filteredCourses.length === 0 ? (
               <div className="text-center py-12">
-                <div className="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                  <BookCopy className="h-8 w-8 text-slate-400" />
+                <div className="h-16 w-16 rounded-full bg-soft-surface-muted flex items-center justify-center mx-auto mb-4">
+                  <BookCopy className="h-8 w-8 text-soft-text-muted" />
                 </div>
-                <p className="text-slate-900 font-medium">No courses found</p>
-                <p className="text-sm text-slate-600 mt-1">No courses match your search criteria.</p>
+                <p className="text-soft-text font-medium">No courses found</p>
+                <p className="text-sm text-soft-text-muted mt-1">No courses match your search criteria.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-200">
-                      <th className="text-left p-4 font-semibold text-slate-900">Course</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Instructor</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Price</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Status</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Created</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Actions</th>
+                    <tr className="border-b border-soft-border">
+                      <th className="text-left p-4 font-semibold text-soft-text">Course</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Instructor</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Price</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Status</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Created</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredCourses.map((course) => (
-                      <tr key={course.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                      <tr key={course.id} className="border-b border-soft-border hover:bg-soft-surface-muted transition-colors">
                         <td className="p-4">
-                          <div className="font-medium text-slate-900 line-clamp-1">{course.title}</div>
-                          <div className="text-xs text-slate-500 mt-0.5 line-clamp-1">{course.description || "No description"}</div>
+                          <div className="font-medium text-soft-text line-clamp-1">{course.title}</div>
+                          <div className="text-xs text-soft-text-muted0 mt-0.5 line-clamp-1">{course.description || "No description"}</div>
                         </td>
                         <td className="p-4">
-                          <div className="text-sm text-slate-700">{course.instructor_name}</div>
+                          <div className="text-sm text-soft-text">{course.instructor_name}</div>
                         </td>
                         <td className="p-4">
-                          <div className="text-sm font-medium text-slate-900">${course.price?.toFixed(2) || "0.00"}</div>
+                          <div className="text-sm font-medium text-soft-text">${course.price?.toFixed(2) || "0.00"}</div>
                         </td>
                         <td className="p-4">
                           <Badge
@@ -260,7 +260,7 @@ export default function AdminCourseManagementPage() {
                           </Badge>
                         </td>
                         <td className="p-4">
-                          <div className="text-sm text-slate-600">
+                          <div className="text-sm text-soft-text-muted">
                             {new Date(course.created_at).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',
@@ -310,4 +310,5 @@ export default function AdminCourseManagementPage() {
     </div>
   );
 }
+
 

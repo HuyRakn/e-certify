@@ -66,10 +66,10 @@ export default function AdminDashboard() {
       <div className="mx-auto max-w-[1600px] space-y-6 p-6 md:p-8 lg:p-10">
         {/* Page Header */}
         <div className="space-y-1">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+          <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
             Admin Dashboard
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-soft-text-muted">
             Manage the entire platform and all users
           </p>
         </div>
@@ -160,4 +160,5 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
 

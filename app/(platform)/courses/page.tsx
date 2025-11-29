@@ -123,14 +123,14 @@ export default function CoursesPage() {
         {/* Page Header */}
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-purple-100 flex items-center justify-center">
-              <BookOpen className="h-6 w-6 text-purple-600" />
+            <div className="h-12 w-12 rounded-xl bg-[var(--brand-surface)] flex items-center justify-center">
+              <BookOpen className="h-6 w-6 text-brand" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+              <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
                 Browse Courses
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-soft-text-muted mt-1">
                 Discover new skills and advance your career
               </p>
             </div>
@@ -139,38 +139,38 @@ export default function CoursesPage() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600">Total Courses</p>
-                  <p className="text-2xl font-bold text-slate-900 mt-1">{courses.length}</p>
+                  <p className="text-sm font-medium text-soft-text-muted">Total Courses</p>
+                  <p className="text-2xl font-bold text-soft-text mt-1">{courses.length}</p>
                 </div>
-                <div className="h-12 w-12 rounded-lg bg-purple-100 flex items-center justify-center">
-                  <BookOpen className="h-6 w-6 text-purple-600" />
+                <div className="h-12 w-12 rounded-lg bg-[var(--brand-surface)] flex items-center justify-center">
+                  <BookOpen className="h-6 w-6 text-brand" />
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600">Available Now</p>
-                  <p className="text-2xl font-bold text-slate-900 mt-1">{filteredCourses.length}</p>
+                  <p className="text-sm font-medium text-soft-text-muted">Available Now</p>
+                  <p className="text-2xl font-bold text-soft-text mt-1">{filteredCourses.length}</p>
                 </div>
-                <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <TrendingUp className="h-6 w-6 text-blue-600" />
+                <div className="h-12 w-12 rounded-lg bg-[var(--brand-surface)] flex items-center justify-center">
+                  <TrendingUp className="h-6 w-6 text-brand" />
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600">Average Duration</p>
-                  <p className="text-2xl font-bold text-slate-900 mt-1">8h</p>
+                  <p className="text-sm font-medium text-soft-text-muted">Average Duration</p>
+                  <p className="text-2xl font-bold text-soft-text mt-1">8h</p>
                 </div>
                 <div className="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center">
                   <Clock className="h-6 w-6 text-indigo-600" />
@@ -181,11 +181,11 @@ export default function CoursesPage() {
         </div>
 
         {/* Search and Filter */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
+        <Card className="border border-soft-border bg-white shadow-sm">
           <CardContent className="p-4">
             <div className="flex items-center gap-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-soft-text-muted" />
                 <Input
                   placeholder="Search courses by title or description..."
                   value={searchQuery}
@@ -205,12 +205,12 @@ export default function CoursesPage() {
         {loading ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="border border-slate-200 animate-pulse">
-                <div className="h-48 bg-slate-200" />
+              <Card key={i} className="border border-soft-border animate-pulse">
+                <div className="h-48 bg-soft-surface-muted" />
                 <CardContent className="p-6">
-                  <div className="h-4 w-3/4 bg-slate-200 rounded" />
-                  <div className="mt-2 h-4 w-1/2 bg-slate-200 rounded" />
-                  <div className="mt-4 h-8 w-full bg-slate-200 rounded" />
+                  <div className="h-4 w-3/4 bg-soft-surface-muted rounded" />
+                  <div className="mt-2 h-4 w-1/2 bg-soft-surface-muted rounded" />
+                  <div className="mt-4 h-8 w-full bg-soft-surface-muted rounded" />
                 </CardContent>
               </Card>
             ))}
@@ -218,8 +218,8 @@ export default function CoursesPage() {
         ) : filteredCourses.length > 0 ? (
           <>
             <div className="flex items-center justify-between">
-              <p className="text-sm text-slate-600">
-                Showing <span className="font-semibold text-slate-900">{filteredCourses.length}</span> course{filteredCourses.length !== 1 ? 's' : ''}
+              <p className="text-sm text-soft-text-muted">
+                Showing <span className="font-semibold text-soft-text">{filteredCourses.length}</span> course{filteredCourses.length !== 1 ? 's' : ''}
               </p>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
@@ -229,15 +229,15 @@ export default function CoursesPage() {
             </div>
           </>
         ) : (
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardContent className="py-16">
               <div className="flex flex-col items-center justify-center space-y-4">
-                <div className="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center">
-                  <Search className="h-8 w-8 text-slate-400" />
+                <div className="h-16 w-16 rounded-full bg-soft-surface-muted flex items-center justify-center">
+                  <Search className="h-8 w-8 text-soft-text-muted" />
                 </div>
                 <div className="text-center space-y-2">
-                  <h3 className="text-lg font-semibold text-slate-900">No courses found</h3>
-                  <p className="text-sm text-slate-600 max-w-md">
+                  <h3 className="text-lg font-semibold text-soft-text">No courses found</h3>
+                  <p className="text-sm text-soft-text-muted max-w-md">
                     Try adjusting your search terms or filters to find what you're looking for.
                   </p>
                 </div>
@@ -249,3 +249,4 @@ export default function CoursesPage() {
     </div>
   );
 }
+

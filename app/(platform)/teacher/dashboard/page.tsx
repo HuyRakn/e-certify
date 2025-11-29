@@ -83,10 +83,10 @@ export default function TeacherDashboard() {
       <div className="mx-auto max-w-[1600px] space-y-6 p-6 md:p-8 lg:p-10">
         {/* Page Header */}
         <div className="space-y-1">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+          <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
             Teacher Dashboard
           </h1>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-soft-text-muted">
             Manage your courses and track student progress
           </p>
         </div>
@@ -159,10 +159,10 @@ export default function TeacherDashboard() {
               </Button>
             </CardContent>
           </Card>
-          <Card className="border border-purple-200 bg-purple-50">
+          <Card className="border border-brand/30 bg-[var(--brand-surface)]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-purple-600" />
+                <ShieldCheck className="h-5 w-5 text-brand" />
                 Skills Passport
               </CardTitle>
               <CardDescription>
@@ -170,7 +170,7 @@ export default function TeacherDashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
+              <Button asChild className="w-full bg-brand hover:bg-[var(--brand-hover)]">
                 <Link href="/passport">
                   <ShieldCheck className="mr-2 h-4 w-4" />
                   Open Passport
@@ -202,4 +202,5 @@ export default function TeacherDashboard() {
     </div>
   );
 }
+
 
