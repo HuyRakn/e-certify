@@ -1,34 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-	/* Soft UI palette (OKLCH) */
-	--color-background: oklch(97% 0.02 240);
-	--color-foreground: oklch(28% 0.04 240);
-	--color-muted: oklch(92% 0.015 240);
-	--color-muted-foreground: oklch(55% 0.02 240);
-	--color-popover: oklch(99% 0.005 240);
-	--color-popover-foreground: oklch(28% 0.04 240);
-	--color-card: oklch(99% 0.005 240);
-	--color-card-foreground: oklch(28% 0.04 240);
-	--color-border: oklch(90% 0.01 240);
-	--color-input: oklch(92% 0.012 240);
-	--color-ring: oklch(62% 0.18 265);
+	/* Soft UI palette - Using HSL for better browser compatibility */
+	/* Fallback HSL values for browsers that don't support OKLCH */
+	--color-background: hsl(220, 33%, 98%);
+	--color-foreground: hsl(215, 28%, 17%);
+	--color-muted: hsl(220, 30%, 94%);
+	--color-muted-foreground: hsl(215, 16%, 45%);
+	--color-popover: hsl(0, 0%, 100%);
+	--color-popover-foreground: hsl(215, 28%, 17%);
+	--color-card: hsl(0, 0%, 100%);
+	--color-card-foreground: hsl(215, 28%, 17%);
+	--color-border: hsl(215, 25%, 88%);
+	--color-input: hsl(215, 25%, 90%);
+	--color-ring: hsl(259, 100%, 62%);
 	--radius: 0.75rem;
 
-	--color-primary: oklch(62% 0.25 272);
-	--color-primary-foreground: oklch(98% 0.01 255);
-	--color-secondary: oklch(94% 0.02 250);
-	--color-secondary-foreground: oklch(40% 0.03 250);
-	--color-accent: oklch(68% 0.18 260);
-	--color-accent-foreground: oklch(98% 0.01 255);
-	--color-destructive: oklch(60% 0.24 25);
-	--color-destructive-foreground: oklch(99% 0 0);
-	--color-success: oklch(70% 0.18 160);
-	--color-success-foreground: oklch(99% 0 0);
-	--color-info: oklch(70% 0.20 250);
-	--color-info-foreground: oklch(98% 0.01 260);
-	--color-warning: oklch(78% 0.16 85);
-	--color-warning-foreground: oklch(26% 0.03 90);
+	--color-primary: hsl(259, 100%, 62%);
+	--color-primary-foreground: hsl(220, 33%, 98%);
+	--color-secondary: hsl(230, 40%, 96%);
+	--color-secondary-foreground: hsl(220, 18%, 35%);
+	--color-accent: hsl(251, 63%, 71%);
+	--color-accent-foreground: hsl(220, 33%, 98%);
+	--color-destructive: hsl(2, 80%, 58%);
+	--color-destructive-foreground: hsl(210, 33%, 98%);
+	--color-success: hsl(161, 68%, 42%);
+	--color-success-foreground: hsl(210, 33%, 98%);
+	--color-info: hsl(210, 85%, 60%);
+	--color-info-foreground: hsl(210, 33%, 98%);
+	--color-warning: hsl(38, 92%, 55%);
+	--color-warning-foreground: hsl(20, 20%, 20%);
 }
 
 :root {
