@@ -1,37 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-	/* Soft UI palette - Using HSL for better browser compatibility */
-	/* Fallback HSL values for browsers that don't support OKLCH */
-	--color-background: hsl(220, 33%, 98%);
-	--color-foreground: hsl(215, 28%, 17%);
-	--color-muted: hsl(220, 30%, 94%);
-	--color-muted-foreground: hsl(215, 16%, 45%);
-	--color-popover: hsl(0, 0%, 100%);
-	--color-popover-foreground: hsl(215, 28%, 17%);
-	--color-card: hsl(0, 0%, 100%);
-	--color-card-foreground: hsl(215, 28%, 17%);
-	--color-border: hsl(215, 25%, 88%);
-	--color-input: hsl(215, 25%, 90%);
-	--color-ring: hsl(259, 100%, 62%);
-	--radius: 0.75rem;
-
-	--color-primary: hsl(259, 100%, 62%);
-	--color-primary-foreground: hsl(220, 33%, 98%);
-	--color-secondary: hsl(230, 40%, 96%);
-	--color-secondary-foreground: hsl(220, 18%, 35%);
-	--color-accent: hsl(251, 63%, 71%);
-	--color-accent-foreground: hsl(220, 33%, 98%);
-	--color-destructive: hsl(2, 80%, 58%);
-	--color-destructive-foreground: hsl(210, 33%, 98%);
-	--color-success: hsl(161, 68%, 42%);
-	--color-success-foreground: hsl(210, 33%, 98%);
-	--color-info: hsl(210, 85%, 60%);
-	--color-info-foreground: hsl(210, 33%, 98%);
-	--color-warning: hsl(38, 92%, 55%);
-	--color-warning-foreground: hsl(20, 20%, 20%);
-}
-
 :root {
 	/* Brand Color - Source of Truth (Extracted from landing hero CTA) */
 	--brand-primary: #7c3eff;
