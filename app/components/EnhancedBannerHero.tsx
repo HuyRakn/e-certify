@@ -43,7 +43,7 @@ export function EnhancedBannerHero() {
             <div className="flex items-center gap-3 pt-2">
               <Button
                 size="default"
-                className="rounded-full bg-white shadow-lg hover:bg-gray-50 font-semibold"
+                className="rounded-full bg-white shadow-lg hover:bg-soft-surface-muted font-semibold"
                 style={{ color: "var(--brand-primary)" }}
               >
                 Explore Courses

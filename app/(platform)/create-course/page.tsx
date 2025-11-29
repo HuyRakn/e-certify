@@ -108,10 +108,10 @@ export default function CreateCoursePage() {
             </Link>
           </Button>
           <div className="space-y-1">
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+            <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
               Create New Course
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-soft-text-muted">
               Start a new course and share your knowledge
             </p>
           </div>
@@ -210,4 +210,5 @@ export default function CreateCoursePage() {
     </div>
   );
 }
+
 

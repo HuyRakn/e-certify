@@ -209,22 +209,22 @@ const Navigation: React.FC = () => {
 					>
 						<GraduationCap className="h-6 w-6 text-white" />
 					</motion.div>
-					<span className="text-xl font-bold text-gray-900">E-Certify</span>
+					<span className="text-xl font-bold text-soft-text">E-Certify</span>
 				</Link>
 				<div className="hidden md:flex items-center gap-2">
-					<Button asChild variant="ghost" className="font-medium text-gray-700">
+					<Button asChild variant="ghost" className="font-medium text-soft-text">
 						<Link href="#features">Features</Link>
 					</Button>
-					<Button asChild variant="ghost" className="font-medium text-gray-700">
+					<Button asChild variant="ghost" className="font-medium text-soft-text">
 						<Link href="#courses">Courses</Link>
 					</Button>
-					<Button asChild variant="ghost" className="font-medium text-gray-700">
+					<Button asChild variant="ghost" className="font-medium text-soft-text">
 						<Link href="#faq">FAQ</Link>
 					</Button>
 					<Link href="/login">
 						<Button
 							variant="ghost"
-							className="font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+							className="font-medium text-soft-text hover:text-soft-text hover:bg-soft-surface-muted"
 						>
 							Sign in
 						</Button>
@@ -277,9 +277,9 @@ const ScrollingLogos: React.FC = () => {
 	const allIcons = [...icons, ...icons, ...icons];
 
 	return (
-		<div className="w-full overflow-x-hidden py-12 bg-gray-50 border-y border-gray-200">
+		<div className="w-full overflow-x-hidden py-12 bg-soft-surface-muted border-y border-soft-border">
 			<div className="text-center mb-8">
-				<h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+				<h3 className="text-sm font-semibold text-soft-text-muted uppercase tracking-wider">
 					Powering the Future of Education with
 				</h3>
 			</div>
@@ -289,7 +289,7 @@ const ScrollingLogos: React.FC = () => {
 						key={index}
 						className="flex items-center justify-center w-64 shrink-0"
 					>
-						<div className="flex items-center gap-3 text-gray-500">
+						<div className="flex items-center gap-3 text-soft-text-muted">
 							{item.icon}
 							<span className="text-lg font-medium">{item.name}</span>
 						</div>
@@ -298,6 +298,36 @@ const ScrollingLogos: React.FC = () => {
 			</div>
 		</div>
 	);
+};
+
+// --- Helper function to wrap hyphenated words ---
+const wrapHyphenatedWords = (text: string) => {
+	// Match words with hyphens (e.g., "tamper-proof", "low-cost", "cross-border")
+	const hyphenatedWordRegex = /\b\w+-\w+(?:-\w+)*\b/g;
+	const parts: (string | JSX.Element)[] = [];
+	let lastIndex = 0;
+	let match;
+	let key = 0;
+
+	while ((match = hyphenatedWordRegex.exec(text)) !== null) {
+		// Add text before the match
+		if (match.index > lastIndex) {
+			parts.push(text.substring(lastIndex, match.index));
+		}
+		// Add the hyphenated word wrapped in span
+		parts.push(
+			<span key={key++} className="whitespace-nowrap">
+				{match[0]}
+			</span>
+		);
+		lastIndex = match.index + match[0].length;
+	}
+	// Add remaining text
+	if (lastIndex < text.length) {
+		parts.push(text.substring(lastIndex));
+	}
+
+	return parts.length > 0 ? parts : text;
 };
 
 // --- FAQ Item Component (Unchanged) ---
@@ -309,14 +339,14 @@ const FaqItem: React.FC<{ question: string; answer: string }> = ({
 
 	return (
 		<motion.div
-			className="border-b border-gray-200"
+			className="border-b border-soft-border"
 			variants={fadeInFromBottom}
 		>
 			<button
 				className="flex items-center justify-between w-full py-6 text-left"
 				onClick={() => setIsOpen(!isOpen)}
 			>
-				<span className="text-lg font-medium text-gray-900">{question}</span>
+				<span className="text-lg font-medium text-soft-text">{question}</span>
 				<motion.div
 					animate={{ rotate: isOpen ? 180 : 0 }}
 					transition={{ duration: 0.3 }}
@@ -337,7 +367,9 @@ const FaqItem: React.FC<{ question: string; answer: string }> = ({
 						transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 						className="overflow-hidden"
 					>
-						<p className="pb-6 text-gray-600 leading-relaxed">{answer}</p>
+						<p className="pb-6 text-soft-text-muted leading-relaxed">
+							{wrapHyphenatedWords(answer)}
+						</p>
 					</motion.div>
 				)}
 			</AnimatePresence>
@@ -372,7 +404,7 @@ export default function HomePage() {
 						</motion.div>
 
 						<motion.h1
-							className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+							className="text-4xl md:text-5xl lg:text-6xl font-bold text-soft-text leading-tight"
 							variants={fadeInFromBottom}
 						>
 							The New Standard
@@ -381,7 +413,7 @@ export default function HomePage() {
 						</motion.h1>
 
 						<motion.p
-							className="text-lg md:text-xl text-gray-600 max-w-2xl leading-relaxed"
+							className="text-lg md:text-xl text-soft-text-muted max-w-2xl leading-relaxed"
 							variants={fadeInFromBottom}
 						>
 							Professional online courses for the APEC ecosystem.{" "}
@@ -393,16 +425,16 @@ export default function HomePage() {
 							className="w-full"
 							variants={fadeInFromBottom}
 						>
-							<div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 sm:gap-6 w-full sm:w-[520px]">
+							<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-5 w-full sm:w-auto">
 								<motion.div 
-									className="w-full sm:w-auto sm:flex-1"
+									className="w-full sm:w-auto"
 									whileHover={{ scale: 1.02 }} 
 									whileTap={{ scale: 0.98 }}
 								>
 									<Button
 										asChild
 										size="lg"
-										className="brand-solid w-full sm:w-auto text-white font-semibold text-lg px-8 py-6 shadow-lg"
+										className="brand-solid w-full sm:w-auto text-white font-semibold text-lg px-12 py-6 shadow-lg"
 									>
 										<Link href="/signup" className="flex items-center justify-center">
 											Get Started Free
@@ -411,7 +443,7 @@ export default function HomePage() {
 									</Button>
 								</motion.div>
 								<motion.div 
-									className="w-full sm:w-auto sm:flex-1"
+									className="w-full sm:w-auto"
 									whileHover={{ scale: 1.02 }} 
 									whileTap={{ scale: 0.98 }}
 								>
@@ -419,7 +451,7 @@ export default function HomePage() {
 										asChild
 										variant="outline"
 										size="lg"
-										className="w-full sm:w-auto font-semibold text-lg px-8 py-6 border-2 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
+										className="w-full sm:w-auto font-semibold text-lg px-12 py-6 border-2 border-soft-border text-soft-text hover:bg-soft-surface-muted hover:border-gray-400"
 									>
 										<Link href="#courses" className="flex items-center justify-center">
 											<BookOpen className="mr-2 h-5 w-5" />
@@ -442,10 +474,10 @@ export default function HomePage() {
 									whileHover={{ scale: 1.05 }}
 									transition={{ type: "spring", stiffness: 300 }}
 								>
-									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+									<div className="text-2xl md:text-3xl font-bold text-soft-text leading-none">
 										1000+
 									</div>
-									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+									<div className="text-xs md:text-sm text-soft-text-muted mt-1 font-medium">
 										Active Students
 									</div>
 								</motion.div>
@@ -455,10 +487,10 @@ export default function HomePage() {
 									whileHover={{ scale: 1.05 }}
 									transition={{ type: "spring", stiffness: 300 }}
 								>
-									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+									<div className="text-2xl md:text-3xl font-bold text-soft-text leading-none">
 										50+
 									</div>
-									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+									<div className="text-xs md:text-sm text-soft-text-muted mt-1 font-medium">
 										Expert Courses
 									</div>
 								</motion.div>
@@ -468,10 +500,10 @@ export default function HomePage() {
 									whileHover={{ scale: 1.05 }}
 									transition={{ type: "spring", stiffness: 300 }}
 								>
-									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+									<div className="text-2xl md:text-3xl font-bold text-soft-text leading-none">
 										95%
 									</div>
-									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium whitespace-nowrap">
+									<div className="text-xs md:text-sm text-soft-text-muted mt-1 font-medium whitespace-nowrap">
 										Completion Rate
 									</div>
 								</motion.div>
@@ -481,10 +513,10 @@ export default function HomePage() {
 									whileHover={{ scale: 1.05 }}
 									transition={{ type: "spring", stiffness: 300 }}
 								>
-									<div className="text-2xl md:text-3xl font-bold text-gray-900 leading-none">
+									<div className="text-2xl md:text-3xl font-bold text-soft-text leading-none">
 										4.9/5
 									</div>
-									<div className="text-xs md:text-sm text-gray-600 mt-1 font-medium">
+									<div className="text-xs md:text-sm text-soft-text-muted mt-1 font-medium">
 										Avg. Rating
 									</div>
 								</motion.div>
@@ -562,10 +594,10 @@ export default function HomePage() {
 						className="text-center space-y-4"
 						variants={fadeInFromBottom}
 					>
-						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+						<h2 className="text-4xl md:text-5xl font-bold text-soft-text">
 							Start Learning in 3 Simple Steps
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+						<p className="text-lg text-soft-text-muted max-w-2xl mx-auto">
 							Go from learner to certified professional, all on one platform.
 						</p>
 					</motion.div>
@@ -577,10 +609,10 @@ export default function HomePage() {
 							<div className="h-20 w-20 rounded-full bg-[var(--brand-surface)] flex items-center justify-center mb-6 mx-auto">
 								<BookOpen className="h-10 w-10 text-brand" />
 							</div>
-							<h3 className="text-2xl font-bold text-gray-900 mb-2">
+							<h3 className="text-2xl font-bold text-soft-text mb-2">
 								1. Enroll in a Course
 							</h3>
-							<p className="text-gray-600">
+							<p className="text-soft-text-muted">
 								Browse our catalog of expert-led courses and find the
 								perfect one to advance your skills.
 							</p>
@@ -592,10 +624,10 @@ export default function HomePage() {
 							<div className="h-20 w-20 rounded-full bg-[var(--brand-surface)] flex items-center justify-center mb-6 mx-auto">
 								<TrendingUp className="h-10 w-10 text-brand" />
 							</div>
-							<h3 className="text-2xl font-bold text-gray-900 mb-2">
+							<h3 className="text-2xl font-bold text-soft-text mb-2">
 								2. Learn & Master
 							</h3>
-							<p className="text-gray-600">
+							<p className="text-soft-text-muted">
 								Complete video lectures, projects, and assessments at your
 								own pace, from anywhere in the world.
 							</p>
@@ -607,11 +639,11 @@ export default function HomePage() {
 							<div className="h-20 w-20 rounded-full bg-[var(--brand-surface)] flex items-center justify-center mb-6 mx-auto">
 								<ShieldCheck className="h-10 w-10 text-brand" />
 							</div>
-							<h3 className="text-2xl font-bold text-gray-900 mb-2 whitespace-nowrap">
+							<h3 className="text-2xl font-bold text-soft-text mb-2 whitespace-nowrap">
 								3. Get Verified On-Chain
 							</h3>
-							<p className="text-gray-600">
-								Receive your permanent, tamper-proof certificate as an NFT
+							<p className="text-soft-text-muted">
+								Receive your permanent, <span className="whitespace-nowrap">tamper-proof</span> certificate as an NFT
 								on the Solana blockchain.
 							</p>
 						</motion.div>
@@ -631,58 +663,58 @@ export default function HomePage() {
 						className="text-center space-y-4"
 						variants={fadeInFromBottom}
 					>
-						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+						<h2 className="text-4xl md:text-5xl font-bold text-soft-text">
 							Why Choose <span className="text-brand">E-Certify?</span>
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+						<p className="text-lg text-soft-text-muted max-w-2xl mx-auto">
 							Everything you need to learn, grow, and prove your skills
 						</p>
 					</motion.div>
 					<div className="grid md:grid-cols-3 gap-8">
 						<motion.div
-							className="p-8 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+							className="p-8 rounded-2xl bg-white border border-soft-border shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
 							<div className="h-14 w-14 rounded-xl brand-solid flex items-center justify-center mb-4">
 								<ShieldCheck className="h-7 w-7 text-white" />
 							</div>
-							<h3 className="text-xl font-bold text-gray-900 mb-2">
+							<h3 className="text-xl font-bold text-soft-text mb-2">
 								Blockchain Verified
 							</h3>
-							<p className="text-gray-600">
+							<p className="text-soft-text-muted">
 								All certificates are stored on-chain using Solana.
 								Immutable, verifiable, and forever yours.
 							</p>
 						</motion.div>
 						<motion.div
-							className="p-8 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+							className="p-8 rounded-2xl bg-white border border-soft-border shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
 							<div className="h-14 w-14 rounded-xl brand-solid flex items-center justify-center mb-4">
 								<TrendingUp className="h-7 w-7 text-white" />
 							</div>
-							<h3 className="text-xl font-bold text-gray-900 mb-2">
+							<h3 className="text-xl font-bold text-soft-text mb-2">
 								APEC Expert Instructors
 							</h3>
-							<p className="text-gray-600">
+							<p className="text-soft-text-muted">
 								Learn from industry professionals across the APEC region,
 								passionate about sharing their knowledge.
 							</p>
 						</motion.div>
 						<motion.div
-							className="p-8 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
+							className="p-8 rounded-2xl bg-white border border-soft-border shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
 							variants={fadeInFromBottom}
 							whileHover={{ scale: 1.03 }}
 						>
 							<div className="h-14 w-14 rounded-xl brand-solid flex items-center justify-center mb-4">
 								<Users className="h-7 w-7 text-white" />
 							</div>
-							<h3 className="text-xl font-bold text-gray-900 mb-2">
+							<h3 className="text-xl font-bold text-soft-text mb-2">
 								Learn at Your Pace
 							</h3>
-							<p className="text-gray-600">
+							<p className="text-soft-text-muted">
 								Self-paced learning with lifetime access. Study when and where
 								it's convenient for you.
 							</p>
@@ -703,10 +735,10 @@ export default function HomePage() {
 						className="text-center space-y-4"
 						variants={fadeInFromBottom}
 					>
-						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+						<h2 className="text-4xl md:text-5xl font-bold text-soft-text">
 							Explore Our Featured Courses
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+						<p className="text-lg text-soft-text-muted max-w-2xl mx-auto">
 							Hand-picked courses to help you get ahead in the digital
 							economy.
 						</p>
@@ -715,7 +747,7 @@ export default function HomePage() {
 						{courses.map((course, index) => (
 							<motion.div
 								key={index}
-								className="rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden group transition-all duration-300 hover:shadow-xl"
+								className="rounded-2xl bg-white border border-soft-border shadow-sm overflow-hidden group transition-all duration-300 hover:shadow-xl"
 								variants={fadeInFromBottom}
 								whileHover={{ y: -5 }}
 							>
@@ -734,15 +766,15 @@ export default function HomePage() {
 											</span>
 											<div className="flex items-center gap-1 text-yellow-500">
 												<Star className="h-4 w-4 fill-current" />
-												<span className="text-sm font-medium text-gray-700">
+												<span className="text-sm font-medium text-soft-text">
 													{course.rating}
 												</span>
 											</div>
 										</div>
-										<h3 className="text-xl font-bold text-gray-900 group-hover:text-brand transition-colors">
+										<h3 className="text-xl font-bold text-soft-text group-hover:text-brand transition-colors">
 											{course.title}
 										</h3>
-										<div className="flex items-center justify-between text-sm text-gray-600 border-t border-gray-100 pt-4">
+										<div className="flex items-center justify-between text-sm text-soft-text-muted border-t border-soft-border pt-4">
 											<div className="flex items-center gap-2">
 												<Clock className="h-4 w-4" />
 												<span>{course.duration}</span>
@@ -762,7 +794,7 @@ export default function HomePage() {
 							asChild
 							size="lg"
 							variant="outline"
-							className="font-semibold text-lg px-8 py-6 border-2 border-gray-300 text-gray-900 hover:bg-gray-50 hover:border-gray-400"
+							className="font-semibold text-lg px-8 py-6 border-2 border-soft-border text-soft-text hover:bg-soft-surface-muted hover:border-gray-400"
 						>
 							<Link href="/courses">
 								Browse All Courses
@@ -784,10 +816,10 @@ export default function HomePage() {
 						className="text-center space-y-4"
 						variants={fadeInFromBottom}
 					>
-						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+						<h2 className="text-4xl md:text-5xl font-bold text-soft-text">
 							What Our <span className="text-brand">Students Say</span>
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+						<p className="text-lg text-soft-text-muted max-w-2xl mx-auto">
 							Real feedback from learners across the APEC ecosystem.
 						</p>
 					</motion.div>
@@ -795,7 +827,7 @@ export default function HomePage() {
 						{testimonials.map((item, index) => (
 							<motion.div
 								key={index}
-								className="p-8 rounded-2xl bg-gray-50 border border-gray-200"
+								className="p-8 rounded-2xl bg-soft-surface-muted border border-soft-border"
 								variants={fadeInFromBottom}
 							>
 								<div className="flex items-center gap-1 text-yellow-500 mb-4">
@@ -805,8 +837,8 @@ export default function HomePage() {
 									<Star className="h-5 w-5 fill-current" />
 									<Star className="h-5 w-5 fill-current" />
 								</div>
-								<p className="text-gray-700 text-lg leading-relaxed mb-6 text-justify">
-									"{item.quote}"
+								<p className="text-soft-text text-lg leading-relaxed mb-6 text-justify">
+									"{wrapHyphenatedWords(item.quote)}"
 								</p>
 								<div className="flex items-center gap-4">
 									<img
@@ -815,10 +847,10 @@ export default function HomePage() {
 										className="h-12 w-12 rounded-full object-cover"
 									/>
 									<div>
-										<h4 className="font-bold text-gray-900">
+										<h4 className="font-bold text-soft-text">
 											{item.name}
 										</h4>
-										<p className="text-sm text-gray-600">
+										<p className="text-sm text-soft-text-muted">
 											{item.title}
 										</p>
 									</div>
@@ -841,14 +873,14 @@ export default function HomePage() {
 						className="text-center space-y-4"
 						variants={fadeInFromBottom}
 					>
-						<h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+						<h2 className="text-4xl md:text-5xl font-bold text-soft-text">
 							Frequently Asked Questions
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+						<p className="text-lg text-soft-text-muted max-w-2xl mx-auto">
 							Have questions? We've got answers.
 						</p>
 					</motion.div>
-					<div className="border-t border-gray-200">
+					<div className="border-t border-soft-border">
 						{faqs.map((faq, index) => (
 							<FaqItem
 								key={index}
@@ -901,7 +933,7 @@ export default function HomePage() {
 
 			{/* --- Footer (Unchanged) --- */}
 			<motion.footer
-				className="container mx-auto px-6 py-12 mt-32 border-t border-gray-200"
+				className="container mx-auto px-6 py-12 mt-32 border-t border-soft-border"
 				initial={{ opacity: 0 }}
 				whileInView={{ opacity: 1 }}
 				transition={{ duration: 0.5 }}
@@ -912,11 +944,11 @@ export default function HomePage() {
 						<div className="h-8 w-8 rounded-lg brand-solid flex items-center justify-center">
 							<GraduationCap className="h-5 w-5 text-white" />
 						</div>
-						<span className="text-lg font-semibold text-gray-900">
+						<span className="text-lg font-semibold text-soft-text">
 							E-Certify
 						</span>
 					</div>
-					<div className="flex flex-wrap justify-center gap-6 text-gray-600 font-medium">
+					<div className="flex flex-wrap justify-center gap-6 text-soft-text-muted font-medium">
 						<Link href="#features" className="hover:text-brand">
 							Features
 						</Link>
@@ -930,7 +962,7 @@ export default function HomePage() {
 							Contact
 						</Link>
 					</div>
-					<p className="text-sm text-gray-600 text-center md:text-right">
+					<p className="text-sm text-soft-text-muted text-center md:text-right">
 						© {new Date().getFullYear()} E-Certify. All rights reserved.
 					</p>
 				</div>

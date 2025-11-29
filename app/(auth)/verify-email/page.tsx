@@ -42,7 +42,7 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-soft-surface-muted p-4">
       <Card className="w-full max-w-md shadow-xl border-0">
         <CardHeader>
           <CardTitle className="text-2xl">Verify your email</CardTitle>
@@ -51,8 +51,8 @@ export default function VerifyEmailPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-3 text-slate-700">
-            <Mail className="h-5 w-5 text-purple-600" />
+          <div className="flex items-center gap-3 text-soft-text">
+            <Mail className="h-5 w-5 text-brand" />
             <span>Didn&apos;t get the email?</span>
           </div>
           {error && (
@@ -64,16 +64,17 @@ export default function VerifyEmailPage() {
             </div>
           )}
           <div className="flex gap-3">
-            <Button onClick={resend} disabled={!email || sending} className="bg-purple-600 hover:bg-purple-700">
+            <Button onClick={resend} disabled={!email || sending} className="bg-brand hover:bg-[var(--brand-hover)]">
               <RefreshCw className="h-4 w-4 mr-2" />
               {sending ? "Sending..." : "Resend verification email"}
             </Button>
-            <Link href="/login" className="ml-auto text-sm text-slate-600 hover:text-slate-800 self-center">Back to sign in</Link>
+            <Link href="/login" className="ml-auto text-sm text-soft-text-muted hover:text-soft-text self-center">Back to sign in</Link>
           </div>
         </CardContent>
       </Card>
     </div>
   );
 }
+
 
 

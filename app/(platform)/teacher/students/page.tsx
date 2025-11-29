@@ -121,14 +121,14 @@ export default function TeacherStudentsPage() {
         {/* Page Header */}
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
-              <Users className="h-6 w-6 text-blue-600" />
+            <div className="h-12 w-12 rounded-xl bg-[var(--brand-surface)] flex items-center justify-center">
+              <Users className="h-6 w-6 text-brand" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+              <h1 className="text-3xl md:text-4xl font-bold text-soft-text">
                 My Students
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-sm text-soft-text-muted mt-1">
                 View and manage students enrolled in your courses
               </p>
             </div>
@@ -137,40 +137,40 @@ export default function TeacherStudentsPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Total Students</CardTitle>
-              <Users className="h-4 w-4 text-slate-400" />
+              <CardTitle className="text-sm font-medium text-soft-text">Total Students</CardTitle>
+              <Users className="h-4 w-4 text-soft-text-muted" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">{stats.totalStudents}</div>
+              <div className="text-2xl font-bold text-soft-text">{stats.totalStudents}</div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Active Students</CardTitle>
-              <TrendingUp className="h-4 w-4 text-slate-400" />
+              <CardTitle className="text-sm font-medium text-soft-text">Active Students</CardTitle>
+              <TrendingUp className="h-4 w-4 text-soft-text-muted" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">{stats.activeStudents}</div>
+              <div className="text-2xl font-bold text-soft-text">{stats.activeStudents}</div>
             </CardContent>
           </Card>
-          <Card className="border border-slate-200 bg-white shadow-sm">
+          <Card className="border border-soft-border bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-700">Avg. Progress</CardTitle>
-              <Clock className="h-4 w-4 text-slate-400" />
+              <CardTitle className="text-sm font-medium text-soft-text">Avg. Progress</CardTitle>
+              <Clock className="h-4 w-4 text-soft-text-muted" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-900">{stats.avgProgress}%</div>
+              <div className="text-2xl font-bold text-soft-text">{stats.avgProgress}%</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Search Bar */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
+        <Card className="border border-soft-border bg-white shadow-sm">
           <CardContent className="p-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-soft-text-muted" />
               <Input
                 type="search"
                 placeholder="Search students by name or course..."
@@ -183,7 +183,7 @@ export default function TeacherStudentsPage() {
         </Card>
 
         {/* Students Table */}
-        <Card className="border border-slate-200 bg-white shadow-sm">
+        <Card className="border border-soft-border bg-white shadow-sm">
           <CardHeader>
             <CardTitle>All Students ({filteredStudents.length})</CardTitle>
             <CardDescription>
@@ -193,58 +193,58 @@ export default function TeacherStudentsPage() {
           <CardContent>
             {loading ? (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-4 text-sm text-slate-600">Loading students...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand mx-auto"></div>
+                <p className="mt-4 text-sm text-soft-text-muted">Loading students...</p>
               </div>
             ) : filteredStudents.length === 0 ? (
               <div className="text-center py-12">
-                <div className="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-slate-400" />
+                <div className="h-16 w-16 rounded-full bg-soft-surface-muted flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-soft-text-muted" />
                 </div>
-                <p className="text-slate-900 font-medium">No students found</p>
-                <p className="text-sm text-slate-600 mt-1">No students have enrolled in your courses yet.</p>
+                <p className="text-soft-text font-medium">No students found</p>
+                <p className="text-sm text-soft-text-muted mt-1">No students have enrolled in your courses yet.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-200">
-                      <th className="text-left p-4 font-semibold text-slate-900">Name</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Course</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Progress</th>
-                      <th className="text-left p-4 font-semibold text-slate-900">Enrolled</th>
+                    <tr className="border-b border-soft-border">
+                      <th className="text-left p-4 font-semibold text-soft-text">Name</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Course</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Progress</th>
+                      <th className="text-left p-4 font-semibold text-soft-text">Enrolled</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredStudents.map((student) => (
-                      <tr key={`${student.id}-${student.course_id}`} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                      <tr key={`${student.id}-${student.course_id}`} className="border-b border-soft-border hover:bg-soft-surface-muted transition-colors">
                         <td className="p-4">
-                          <div className="font-medium text-slate-900">
+                          <div className="font-medium text-soft-text">
                             {student.full_name || "Unknown User"}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">{student.email}</div>
+                          <div className="text-xs text-soft-text-muted0 mt-0.5">{student.email}</div>
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-2">
-                            <BookOpen className="h-4 w-4 text-slate-400" />
-                            <span className="text-sm text-slate-700">{student.course_title}</span>
+                            <BookOpen className="h-4 w-4 text-soft-text-muted" />
+                            <span className="text-sm text-soft-text">{student.course_title}</span>
                           </div>
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            <div className="flex-1 bg-slate-200 rounded-full h-2 max-w-[120px]">
+                            <div className="flex-1 bg-soft-surface-muted rounded-full h-2 max-w-[120px]">
                               <div
-                                className="bg-blue-600 h-2 rounded-full transition-all"
+                                className="bg-brand h-2 rounded-full transition-all"
                                 style={{ width: `${student.progress || 0}%` }}
                               />
                             </div>
-                            <span className="text-sm font-medium text-slate-700 min-w-12">
+                            <span className="text-sm font-medium text-soft-text min-w-12">
                               {student.progress || 0}%
                             </span>
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className="text-sm text-slate-600">
+                          <div className="text-sm text-soft-text-muted">
                             {new Date(student.enrolled_at).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',
@@ -264,4 +264,5 @@ export default function TeacherStudentsPage() {
     </div>
   );
 }
+
 

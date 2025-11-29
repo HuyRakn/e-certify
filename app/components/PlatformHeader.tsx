@@ -84,7 +84,7 @@ return (
 							placeholder="Search for courses, users, or credentials..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
-							className="w-full pl-9 pr-4 h-11 rounded-full bg-transparent border border-transparent shadow-none focus:bg-white focus:border-gray-200 focus:shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+							className="w-full pl-9 pr-4 h-11 rounded-full bg-transparent border border-transparent shadow-none focus:bg-white focus:border-soft-border focus:shadow-sm focus-visible:ring-0 focus-visible:ring-offset-0"
 						/>
 					</div>
 				</div>
@@ -138,3 +138,4 @@ return (
         </header>
 	);
 }
+

@@ -82,8 +82,8 @@ function AuthCallbackContent() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
-          <p className="mt-4 text-sm text-slate-600">Completing sign in...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand mx-auto"></div>
+          <p className="mt-4 text-sm text-soft-text-muted">Completing sign in...</p>
         </div>
       </div>
     );
@@ -102,7 +102,7 @@ function AuthCallbackContent() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
-        <p className="text-purple-600">Sign in successful! Redirecting...</p>
+        <p className="text-brand">Sign in successful! Redirecting...</p>
       </div>
     </div>
   );
@@ -114,8 +114,8 @@ export default function AuthCallbackPage() {
       fallback={
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-sm text-slate-600">Loading...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand mx-auto"></div>
+            <p className="mt-4 text-sm text-soft-text-muted">Loading...</p>
           </div>
         </div>
       }
@@ -124,3 +124,4 @@ export default function AuthCallbackPage() {
     </Suspense>
   );
 }
+
