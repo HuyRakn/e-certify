@@ -34,7 +34,7 @@ export function BestInstructors({ instructors }: BestInstructorsProps) {
           <Button 
             variant="link" 
             size="sm" 
-            className="text-xs text-brand hover:text-[var(--brand-hover)] font-semibold h-auto p-0"
+            className="text-xs text-brand hover:text-(--brand-hover) font-semibold h-auto p-0"
             asChild
           >
             <Link href="/instructors">See All</Link>

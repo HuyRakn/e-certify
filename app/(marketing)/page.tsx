@@ -304,7 +304,7 @@ const ScrollingLogos: React.FC = () => {
 const wrapHyphenatedWords = (text: string) => {
 	// Match words with hyphens (e.g., "tamper-proof", "low-cost", "cross-border")
 	const hyphenatedWordRegex = /\b\w+-\w+(?:-\w+)*\b/g;
-	const parts: (string | JSX.Element)[] = [];
+	const parts: (string | React.ReactNode)[] = [];
 	let lastIndex = 0;
 	let match;
 	let key = 0;
