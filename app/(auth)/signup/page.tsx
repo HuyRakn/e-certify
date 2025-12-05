@@ -59,11 +59,11 @@ export default function SignUpPage() {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-soft-surface-muted p-4">
+    <div className="min-h-screen flex items-center justify-center bg-soft-bg p-6">
       <div className="w-full max-w-md space-y-6">
         {/* Logo and Title */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-brand shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-brand shadow-soft mb-4">
             <GraduationCap className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-soft-text">Create your account</h1>
@@ -71,7 +71,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Signup Card */}
-        <Card className="shadow-xl border-0">
+        <Card className="shadow-soft-lg border border-soft-border/60 bg-soft-surface backdrop-blur-2xl">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-2xl font-semibold">Get started</CardTitle>
             <CardDescription>Fill in your details to create your account</CardDescription>
@@ -168,9 +168,9 @@ export default function SignUpPage() {
                   </div>
                 )}
 
-                <Button 
-                  type="submit" 
-                  className="w-full h-11 bg-brand hover:bg-[var(--brand-hover)] text-white font-medium shadow-md" 
+                <Button
+                  type="submit"
+                  className="w-full h-11 brand-solid shadow-soft-sm"
                   disabled={!email || !password || loading}
                 >
                   {loading ? (
@@ -188,7 +188,7 @@ export default function SignUpPage() {
           <CardFooter className="flex flex-col gap-3 pt-4 border-t">
             <p className="text-sm text-soft-text-muted text-center">
               Already have an account?{" "}
-              <Link href="/login" className="text-brand hover:text-[var(--brand-hover)] font-medium hover:underline">
+              <Link href="/login" className="text-brand hover:text-brand-hover font-medium hover:underline">
                 Sign in
               </Link>
             </p>
