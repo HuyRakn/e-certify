@@ -74,7 +74,7 @@ export function PassportCard({ asset, index = 0 }: PassportCardProps) {
               <Badge variant="secondary" className="text-[11px] font-semibold bg-[var(--brand-surface)] text-brand border-none">
                 {credentialType}
               </Badge>
-              <Badge variant="outline" className="text-[11px] border border-soft-border/70 text-soft-text-muted ring-0">
+              <Badge variant="outline" className="text-[11px] ring-[0.5px] ring-soft-border/40 text-soft-text-muted">
                 {category}
               </Badge>
             </div>
