@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Upload, FileText, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import Papa from "papaparse";
 
 type CsvRow = {
   student_email: string;
@@ -20,6 +21,13 @@ type MintResult = {
   error?: string;
 };
 
+type StudentStatus = {
+  student: string;
+  status: 'pending' | 'generating' | 'uploading-image' | 'uploading-metadata' | 'minting' | 'done' | 'error';
+  error?: string;
+  tx?: string;
+};
+
 export default function CertifyPage() {
   const [collectionMint, setCollectionMint] = useState(process.env.NEXT_PUBLIC_APEC_COLLECTION || "");
   const [merkleTree, setMerkleTree] = useState(process.env.MERKLE_TREE || "");
@@ -28,34 +36,44 @@ export default function CertifyPage() {
   const [status, setStatus] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<MintResult[]>([]);
+  const [studentStatuses, setStudentStatuses] = useState<StudentStatus[]>([]);
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
 
-  const parseCSV = (text: string): CsvRow[] => {
-    const lines = text.trim().split('\n');
-    if (lines.length < 2) return [];
-    
-    const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-    const requiredHeaders = ['student_email', 'student_name', 'major', 'issue_date'];
-    
-    // Validate headers
-    const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
-    if (missingHeaders.length > 0) {
-      throw new Error(`Missing required columns: ${missingHeaders.join(', ')}`);
-    }
+  const parseCSV = (file: File): Promise<CsvRow[]> => {
+    return new Promise((resolve, reject) => {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: (header) => header.trim().toLowerCase(),
+        complete: (results) => {
+          // Validate required headers
+          const requiredHeaders = ['student_email', 'student_name', 'major', 'issue_date'];
+          const headers = results.meta.fields || [];
+          const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
+          
+          if (missingHeaders.length > 0) {
+            reject(new Error(`Missing required columns: ${missingHeaders.join(', ')}`));
+            return;
+          }
 
-    return lines.slice(1).map(line => {
-      const values = line.split(',').map(v => v.trim());
-      const row: any = {};
-      headers.forEach((header, index) => {
-        row[header] = values[index] || '';
+          // Transform and validate data
+          const rows = results.data
+            .map((row: any) => ({
+              student_email: row.student_email || '',
+              student_name: row.student_name || '',
+              major: row.major || '',
+              issue_date: row.issue_date || new Date().toISOString().split('T')[0],
+              wallet: row.wallet || '',
+            } as CsvRow))
+            .filter((row: CsvRow) => row.student_email && row.student_name);
+
+          resolve(rows);
+        },
+        error: (error) => {
+          reject(new Error(`CSV parsing error: ${error.message}`));
+        },
       });
-      return {
-        student_email: row.student_email || '',
-        student_name: row.student_name || '',
-        major: row.major || '',
-        issue_date: row.issue_date || new Date().toISOString().split('T')[0],
-        wallet: row.wallet || '',
-      } as CsvRow;
-    }).filter(row => row.student_email && row.student_name);
+    });
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,14 +84,30 @@ export default function CertifyPage() {
     setStatus("");
 
     try {
-      const text = await file.text();
-      const parsed = parseCSV(text);
+      const parsed = await parseCSV(file);
       setCsvData(parsed);
       setStatus(`Parsed ${parsed.length} student records. Ready to mint.`);
+      
+      // Initialize student statuses
+      setStudentStatuses(
+        parsed.map((row) => ({
+          student: row.student_email || row.student_name,
+          status: 'pending' as const,
+        }))
+      );
     } catch (error: any) {
       setStatus(`Error parsing CSV: ${error.message}`);
       setCsvData([]);
+      setStudentStatuses([]);
     }
+  };
+
+  const updateStudentStatus = (student: string, status: StudentStatus['status'], error?: string, tx?: string) => {
+    setStudentStatuses((prev) =>
+      prev.map((s) =>
+        s.student === student ? { ...s, status, error, tx } : s
+      )
+    );
   };
 
   const runBatchMint = async () => {
@@ -88,31 +122,92 @@ export default function CertifyPage() {
     }
 
     setLoading(true);
-    setStatus("Minting credentials...");
+    setStatus("Processing credentials...");
     setResults([]);
+    setProgress({ current: 0, total: csvData.length });
+
+    // Initialize all students as pending
+    setStudentStatuses(
+      csvData.map((row) => ({
+        student: row.student_email || row.student_name,
+        status: 'pending' as const,
+      }))
+    );
 
     try {
-      const response = await fetch('/api/mint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          collectionMint,
-          merkleTree,
-          rows: csvData,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Mint request failed');
+      // Process in batches using Promise.all for parallel processing
+      const BATCH_SIZE = 5; // Process 5 students at a time
+      const batches: CsvRow[][] = [];
+      
+      for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
+        batches.push(csvData.slice(i, i + BATCH_SIZE));
       }
 
-      setResults(data.results || []);
-      const successful = data.successful || 0;
-      const failed = data.failed || 0;
+      const allResults: MintResult[] = [];
+
+      for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+        const batch = batches[batchIndex];
+        
+        // Process batch in parallel
+        const batchPromises = batch.map(async (row) => {
+          const studentId = row.student_email || row.student_name;
+          
+          try {
+            // Update status: generating
+            updateStudentStatus(studentId, 'generating');
+            
+            // Call API for this student
+            const response = await fetch('/api/mint', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                collectionMint,
+                merkleTree,
+                rows: [row], // Single student per request for now
+              }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.error || 'Mint request failed');
+            }
+
+            const result = data.results?.[0];
+            if (result?.tx) {
+              updateStudentStatus(studentId, 'done', undefined, result.tx);
+              allResults.push(result);
+            } else {
+              throw new Error(result?.error || 'Unknown error');
+            }
+          } catch (error: any) {
+            updateStudentStatus(studentId, 'error', error.message);
+            allResults.push({
+              student: studentId,
+              error: error.message || 'Unknown error',
+            });
+          } finally {
+            setProgress((prev) => ({
+              ...prev,
+              current: prev.current + 1,
+            }));
+          }
+        });
+
+        // Wait for batch to complete
+        await Promise.all(batchPromises);
+        
+        // Small delay between batches to avoid overwhelming the network
+        if (batchIndex < batches.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      setResults(allResults);
+      const successful = allResults.filter(r => r.tx).length;
+      const failed = allResults.filter(r => r.error).length;
       setStatus(
-        `Minting complete! ${successful} successful, ${failed} failed.`
+        `Processing complete! ${successful} successful, ${failed} failed.`
       );
     } catch (e: any) {
       setStatus(`Error: ${e?.message || 'Unknown error'}`);
@@ -201,6 +296,33 @@ export default function CertifyPage() {
         </Card>
       </div>
 
+      {/* Progress Card */}
+      {loading && progress.total > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Processing Progress</CardTitle>
+            <CardDescription>
+              {progress.current} of {progress.total} students processed
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="w-full bg-gray-200 rounded-full h-4">
+                <div
+                  className="bg-blue-600 h-4 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${(progress.current / progress.total) * 100}%`,
+                  }}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground text-center">
+                {Math.round((progress.current / progress.total) * 100)}% complete
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Status Card */}
       {status && (
         <Card>
@@ -214,6 +336,61 @@ export default function CertifyPage() {
                 <XCircle className="h-4 w-4 text-red-600" />
               ) : null}
               <p className="text-sm">{status}</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Student Statuses */}
+      {studentStatuses.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Student Processing Status</CardTitle>
+            <CardDescription>
+              Real-time status for each student
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {studentStatuses.map((studentStatus, index) => (
+                <div
+                  key={index}
+                  className={`p-3 rounded border flex items-center justify-between ${
+                    studentStatus.status === 'done'
+                      ? 'bg-green-50 border-green-200'
+                      : studentStatus.status === 'error'
+                      ? 'bg-red-50 border-red-200'
+                      : studentStatus.status === 'pending'
+                      ? 'bg-gray-50 border-gray-200'
+                      : 'bg-blue-50 border-blue-200'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {studentStatus.status === 'done' ? (
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    ) : studentStatus.status === 'error' ? (
+                      <XCircle className="h-4 w-4 text-red-600" />
+                    ) : studentStatus.status === 'pending' ? (
+                      <div className="h-4 w-4 rounded-full bg-gray-300" />
+                    ) : (
+                      <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
+                    )}
+                    <span className="font-medium text-sm">{studentStatus.student}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {studentStatus.status === 'generating' && 'Generating image...'}
+                    {studentStatus.status === 'uploading-image' && 'Uploading image...'}
+                    {studentStatus.status === 'uploading-metadata' && 'Uploading metadata...'}
+                    {studentStatus.status === 'minting' && 'Minting...'}
+                    {studentStatus.status === 'done' && studentStatus.tx && (
+                      <span className="text-green-600">Success: {studentStatus.tx.slice(0, 8)}...</span>
+                    )}
+                    {studentStatus.status === 'error' && (
+                      <span className="text-red-600">{studentStatus.error}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

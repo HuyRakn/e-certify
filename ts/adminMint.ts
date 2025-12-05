@@ -3,6 +3,11 @@
  * 
  * This service handles batch minting of credentials using Bubblegum SDK.
  * CRITICAL: Sets leaf_delegate to Program PDA for Soulbound logic.
+ * 
+ * Now includes:
+ * - Dynamic certificate image generation
+ * - Arweave upload via Irys
+ * - Metaplex metadata standard
  */
 
 import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
@@ -12,6 +17,10 @@ import { mintV1, mplBubblegum } from '@metaplex-foundation/mpl-bubblegum';
 import { Keypair, PublicKey } from '@solana/web3.js';
 import * as dotenv from 'dotenv';
 import { join } from 'path';
+import { generateCertificateImage } from '../lib/utils/certificate-generator';
+import { uploadImage, uploadMetadata } from '../lib/arweave/irys';
+import { buildMetaplexMetadata } from '../lib/utils/metadata-builder';
+import { StudentCertificateData } from '../lib/types/metadata';
 
 // Load environment variables
 dotenv.config({ path: join(process.cwd(), '.env.local') });
@@ -103,13 +112,40 @@ class AdminService {
       try {
         const studentWallet = fromWeb3JsPublicKey(new PublicKey(student.wallet));
         
-        // Prepare metadata
-        const metadataUri = `https://api.apec.edu.vn/metadata/${student.email || student.name}`;
+        console.log(`\n📋 Processing ${student.name} (${student.email})...`);
         
-        const metadata = {
-          name: `APEC Credential: ${student.name}`,
-          symbol: 'APEC-CRED',
-          uri: metadataUri,
+        // Step 1: Generate certificate image
+        console.log(`   🎨 Generating certificate image...`);
+        const studentData: StudentCertificateData = {
+          name: student.name,
+          email: student.email || '',
+          major: student.major,
+          issueDate: student.issue_date || new Date().toISOString().split('T')[0],
+          certificateId: `APEC-${student.email?.split('@')[0] || student.name.replace(/\s+/g, '-')}-${Date.now()}`,
+        };
+        
+        const imageBuffer = await generateCertificateImage(studentData);
+        
+        // Step 2: Upload image to Arweave
+        console.log(`   📤 Uploading image to Arweave...`);
+        const imageFilename = `certificate-${studentData.certificateId}.png`;
+        const imageUrl = await uploadImage(imageBuffer, imageFilename);
+        
+        // Step 3: Build metadata
+        console.log(`   📄 Building metadata...`);
+        const metadata = buildMetaplexMetadata(studentData, imageUrl);
+        
+        // Step 4: Upload metadata to Arweave
+        console.log(`   📤 Uploading metadata to Arweave...`);
+        const metadataFilename = `metadata-${studentData.certificateId}.json`;
+        const metadataUrl = await uploadMetadata(metadata, metadataFilename);
+        
+        // Step 5: Mint cNFT with metadata URL
+        console.log(`   🪙 Minting cNFT...`);
+        const mintMetadata = {
+          name: metadata.name,
+          symbol: metadata.symbol,
+          uri: metadataUrl, // Use Arweave metadata URL
           sellerFeeBasisPoints: 0,
           creators: [
             {
@@ -126,19 +162,19 @@ class AdminService {
 
         // Mint cNFT with Soulbound logic
         // CRITICAL: leaf_delegate = Program PDA (prevents transfer)
-        console.log(`Minting credential for ${student.name} (${student.email})...`);
-        
         const builder = await mintV1(this.umi, {
           leafOwner: studentWallet,
           leafDelegate: umiProgramAuthority, // SOULBOUND: Program PDA
           merkleTree: umiMerkleTree,
-          metadata: metadata,
+          metadata: mintMetadata,
         });
 
         const result = await builder.sendAndConfirm(this.umi);
         
         console.log(`✅ Minted credential for ${student.name}`);
         console.log(`   Transaction: ${result.signature}`);
+        console.log(`   Image: ${imageUrl}`);
+        console.log(`   Metadata: ${metadataUrl}`);
         
         results.push({
           student: student.email || student.name,

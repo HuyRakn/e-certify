@@ -234,6 +234,30 @@ This prevents students from transferring their credentials (Soulbound).
 - [ ] Verify CPI calls trong Smart Contract hoạt động đúng (sau khi deploy)
 - [ ] Test end-to-end minting flow với Smart Contract
 
+### Tuần 2 - Data Layer & Storage ✅
+
+**Đã hoàn thành:**
+- ✅ Dynamic certificate image generation với satori (không dùng static images)
+- ✅ Irys SDK integration cho Arweave upload (Node Devnet - miễn phí)
+- ✅ Metaplex metadata standard với attributes đầy đủ
+- ✅ Batch processing với Promise.all (5 students/batch)
+- ✅ CSV parsing với papaparse
+- ✅ Progress tracking và real-time status updates
+- ✅ Upload images và metadata lên Arweave trước khi mint
+
+**Files mới:**
+- `lib/arweave/irys.ts` - Irys upload utilities
+- `lib/types/metadata.ts` - Metaplex metadata types
+- `lib/utils/metadata-builder.ts` - Metadata builder
+- `lib/utils/certificate-generator.ts` - Image generator
+- `app/api/certificate/image/route.ts` - Image generation API
+
+**Để test:**
+- [ ] Test image generation API endpoint
+- [ ] Test batch minting với CSV upload
+- [ ] Verify Arweave URLs accessible
+- [ ] Verify metadata hiển thị đúng trên NFT viewers
+
 ### Production Checklist
 
 - [ ] Add `wallet_address` column to Supabase `profiles` table
