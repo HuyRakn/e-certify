@@ -69,8 +69,9 @@ export default function SkillsPassportPage() {
   }, [publicKey, connected]);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-[1600px] space-y-6 p-6 md:p-8 lg:p-10">
+    <div className="min-h-screen bg-soft-bg">
+      <div className="space-y-6">
+        <div className="rounded-3xl border border-soft-border/70 bg-white shadow-soft p-6 md:p-7 lg:p-8 space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div className="space-y-1">
@@ -153,13 +154,14 @@ export default function SkillsPassportPage() {
                 Found <span className="text-brand font-semibold">{certificates.length}</span> certificate{certificates.length !== 1 ? 's' : ''}
               </p>
             </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
               {certificates.map((cert, index) => (
                 <PassportCard key={cert.id} asset={cert} index={index} />
               ))}
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
