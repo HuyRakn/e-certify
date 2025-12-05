@@ -1,27 +1,32 @@
-// All code and comments in English.
+/**
+ * Admin Service for Batch Minting Compressed NFTs
+ * 
+ * This service handles batch minting of credentials using Bubblegum SDK.
+ * CRITICAL: Sets leaf_delegate to Program PDA for Soulbound logic.
+ */
 
-import { createSolanaRpc } from '@solana/web3.js';
-import { createHttpTransport } from '@solana/rpc-transport-http';
+import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
+import { createSignerFromKeypair, signerIdentity } from '@metaplex-foundation/umi';
+import { fromWeb3JsKeypair, fromWeb3JsPublicKey } from '@metaplex-foundation/umi-web3js-adapters';
+import { mintV1, mplBubblegum } from '@metaplex-foundation/mpl-bubblegum';
+import { Keypair, PublicKey } from '@solana/web3.js';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
 
-// NOTE: web3.js v2 compatibility
-// For web3.js v2, Keypair and PublicKey exports may differ.
-// If you encounter TypeScript errors, you may need to:
-// 1. Install @solana/web3.js-legacy-compat: npm install @solana/web3.js-legacy-compat
-// 2. Import from there: import { Keypair, PublicKey } from '@solana/web3.js-legacy-compat'
-// 3. Or use dynamic imports at runtime (as done below)
-// For MVP, we use dynamic imports to avoid compilation errors
-// Note: Bubblegum v5 API may differ - for MVP we'll use a simplified approach
-// import { createMintToCollectionV1Instruction, PROGRAM_ID as BUBBLEGUM_PROGRAM_ID } from '@metaplex-foundation/mpl-bubblegum';
-// Note: @solana/spl-account-compression may need to be installed separately
-// import { getConcurrentMerkleTreeAccountSize, PROGRAM_ID as COMPRESSION_PROGRAM_ID } from '@solana/spl-account-compression';
+// Load environment variables
+dotenv.config({ path: join(process.cwd(), '.env.local') });
 
-// --- Configuration ---
-const RPC_URL = process.env.RPC_URL || 'https://devnet.helius-rpc.com/?api-key=3ad52cea-a8c4-41e2-8b01-22230620e995';
-const COLLECTION_MINT = process.env.COLLECTION_MINT || '11111111111111111111111111111111';
-const MERKLE_TREE = process.env.MERKLE_TREE || '11111111111111111111111111111111';
+// Program ID from credify_program
+const CREDIFY_PROGRAM_ID = new PublicKey('CRD111111111111111111111111111111111111111');
 
-const rpc = createSolanaRpc(RPC_URL);
-const transport = createHttpTransport({ url: RPC_URL });
+// Derive Program PDA for tree authority
+function getProgramTreeAuthorityPDA(): [PublicKey, number] {
+  const [pda, bump] = PublicKey.findProgramAddressSync(
+    [Buffer.from('authority')],
+    CREDIFY_PROGRAM_ID
+  );
+  return [pda, bump];
+}
 
 type Student = { 
   name: string; 
@@ -32,78 +37,51 @@ type Student = {
 };
 
 class AdminService {
-  private payer: any = null; // Keypair type - using any for MVP compatibility
+  private payer: Keypair | null = null;
+  private umi: any = null;
 
-  // Initialize payer asynchronously
-  async initializePayer() {
-    if (this.payer) return; // Already initialized
+  // Initialize payer and UMI
+  async initialize() {
+    if (this.payer && this.umi) return; // Already initialized
     
-    // For MVP: Load payer from environment or generate a new one
-    // In production, this should be loaded from a secure key management system
+    // Load payer from environment
     const payerSecretKey = process.env.PAYER_SECRET_KEY;
-    if (payerSecretKey) {
-      try {
-        const keyArray = JSON.parse(payerSecretKey);
-        // Dynamic import for compatibility
-        const web3 = await import('@solana/web3.js');
-        const Keypair = (web3 as any).Keypair || (web3 as any).default?.Keypair;
-        if (!Keypair) {
-          throw new Error('Keypair not found in @solana/web3.js');
-        }
-        this.payer = Keypair.fromSecretKey(new Uint8Array(keyArray));
-      } catch (e) {
-        console.warn('Failed to load payer from env, generating new keypair');
-        // Dynamic import for generateKeyPair
-        const web3 = await import('@solana/web3.js');
-        const generateKeyPair = (web3 as any).generateKeyPair || (web3 as any).default?.generateKeyPair;
-        if (!generateKeyPair) {
-          throw new Error('generateKeyPair not found in @solana/web3.js');
-        }
-        this.payer = generateKeyPair();
-      }
-    } else {
-      const web3 = await import('@solana/web3.js');
-      const generateKeyPair = (web3 as any).generateKeyPair || (web3 as any).default?.generateKeyPair;
-      if (!generateKeyPair) {
-        throw new Error('generateKeyPair not found in @solana/web3.js');
-      }
-      this.payer = generateKeyPair();
-      console.warn('No PAYER_SECRET_KEY in env. Generated new keypair. This is for testing only!');
+    if (!payerSecretKey) {
+      throw new Error('PAYER_SECRET_KEY not found in .env.local');
     }
-  }
 
-  async createCollection(): Promise<string> {
-    console.log('Using Collection Mint:', COLLECTION_MINT);
-    // For MVP: Return existing collection or placeholder
-    // In production, this would create a Metaplex Collection NFT
-    // using @metaplex-foundation/mpl-token-metadata
-    return COLLECTION_MINT;
-  }
+    try {
+      const keyArray = JSON.parse(payerSecretKey);
+      this.payer = Keypair.fromSecretKey(new Uint8Array(keyArray));
+    } catch (e) {
+      throw new Error(`Failed to parse PAYER_SECRET_KEY: ${e}`);
+    }
 
-  async createMerkleTree(maxDepth: number = 14, maxBufferSize: number = 64): Promise<string> {
-    console.log('Using Merkle Tree:', MERKLE_TREE);
-    // For MVP: Return existing tree or placeholder
-    // In production, this would:
-    // 1. Calculate tree account size using getConcurrentMerkleTreeAccountSize
-    // 2. Create the tree account
-    // 3. Initialize it via Bubblegum's createTree instruction
-    return MERKLE_TREE;
+    // Setup UMI
+    const rpcUrl = process.env.RPC_URL || process.env.HELIUS_API_KEY_URL;
+    if (!rpcUrl) {
+      throw new Error('RPC_URL or HELIUS_API_KEY_URL not found in .env.local');
+    }
+
+    this.umi = createUmi(rpcUrl);
+    this.umi.use(mplBubblegum());
+    const umiPayer = createSignerFromKeypair(this.umi, fromWeb3JsKeypair(this.payer));
+    this.umi.use(signerIdentity(umiPayer));
   }
 
   /**
    * Batch mint cNFT credentials for students
-   * This is the core minting function that uses Bubblegum v5
+   * CRITICAL: Sets leaf_delegate to Program PDA for Soulbound logic
    */
   async batchMintCredentials(
     merkleTree: string,
     collectionMint: string,
     students: Student[]
   ): Promise<{ success: boolean; results: Array<{ student: string; tx?: string; error?: string }> }> {
-    // Ensure payer is initialized
-    await this.initializePayer();
+    await this.initialize();
     
-    if (!this.payer) {
-      throw new Error('Payer keypair not initialized');
+    if (!this.payer || !this.umi) {
+      throw new Error('Service not initialized');
     }
 
     console.log(`Starting to mint ${students.length} credentials...`);
@@ -113,153 +91,115 @@ class AdminService {
 
     const results: Array<{ student: string; tx?: string; error?: string }> = [];
 
-    try {
-      // Get latest blockhash
-      const { value: blockhash } = await rpc.getLatestBlockhash().send();
-      console.log('Fetched latest blockhash:', blockhash.blockhash);
+    // Derive Program PDA for leaf_delegate (Soulbound)
+    const [programAuthorityPDA] = getProgramTreeAuthorityPDA();
+    const umiProgramAuthority = fromWeb3JsPublicKey(programAuthorityPDA);
+    const umiMerkleTree = fromWeb3JsPublicKey(new PublicKey(merkleTree));
+    const umiCollectionMint = fromWeb3JsPublicKey(new PublicKey(collectionMint));
 
-      // Dynamic import PublicKey once for the loop
-      const web3PublicKey = await import('@solana/web3.js');
-      const PublicKeyClass = (web3PublicKey as any).PublicKey || (web3PublicKey as any).default?.PublicKey;
-      if (!PublicKeyClass) {
-        throw new Error('PublicKey not found in @solana/web3.js');
-      }
+    console.log(`Program Authority PDA (leaf_delegate): ${programAuthorityPDA.toBase58()}\n`);
 
-      // For each student, mint a cNFT
-      for (const student of students) {
-        try {
-          const studentWallet = new PublicKeyClass(student.wallet);
-          
-          // Prepare metadata URI (in production, upload to Arweave/IPFS)
-          const metadataUri = `https://api.apec.edu.vn/metadata/${student.email || student.name}`;
-
-          // Create metadata object
-          const metadata = {
-            name: `APEC Credential: ${student.name}`,
-            symbol: 'APEC-CRED',
-            uri: metadataUri,
-            sellerFeeBasisPoints: 0,
-            creators: [
-              {
-                address: this.payer.publicKey,
-                verified: true,
-                share: 100,
-              },
-            ],
-            collection: {
-              key: new PublicKeyClass(collectionMint),
-              verified: false, // Will be verified separately if needed
-            },
-            attributes: [
-              { trait_type: 'Student Name', value: student.name },
-              ...(student.major ? [{ trait_type: 'Major', value: student.major }] : []),
-              ...(student.issue_date ? [{ trait_type: 'Issue Date', value: student.issue_date }] : []),
-            ],
-          };
-
-          // Build mint instruction
-          // Note: This is a simplified version. Full implementation requires:
-          // - Proper account derivation for Bubblegum
-          // - Merkle tree account setup
-          // - Metadata account creation
-          // - Collection verification
-          
-          // For MVP, we'll log the intent and return mock transaction
-          // In production, uncomment and complete the CPI call below:
-          
-          /*
-          const mintIx = createMintToCollectionV1Instruction(
+    for (const student of students) {
+      try {
+        const studentWallet = fromWeb3JsPublicKey(new PublicKey(student.wallet));
+        
+        // Prepare metadata
+        const metadataUri = `https://api.apec.edu.vn/metadata/${student.email || student.name}`;
+        
+        const metadata = {
+          name: `APEC Credential: ${student.name}`,
+          symbol: 'APEC-CRED',
+          uri: metadataUri,
+          sellerFeeBasisPoints: 0,
+          creators: [
             {
-              treeAuthority: new PublicKey(merkleTree), // Actually tree authority PDA
-              leafOwner: studentWallet,
-              leafDelegate: studentWallet,
-              merkleTree: new PublicKey(merkleTree),
-              payer: this.payer.publicKey,
-              treeDelegate: this.payer.publicKey, // Or program PDA
-              collectionAuthority: this.payer.publicKey,
-              collectionAuthorityRecordPda: BUBBLEGUM_PROGRAM_ID, // Or derived PDA
-              collectionMint: new PublicKey(collectionMint),
-              collectionMetadata: // Derive metadata PDA
-              editionAccount: // Derive edition PDA
-              bubblegumSigner: // Derive signer PDA
-              compressionProgram: COMPRESSION_PROGRAM_ID,
-              logWrapper: // Noop program
-              bubblegumProgram: BUBBLEGUM_PROGRAM_ID,
-              tokenProgram: // Token program
-              systemProgram: // System program
+              address: fromWeb3JsPublicKey(this.payer.publicKey),
+              verified: true,
+              share: 100,
             },
-            {
-              metadataArgs: metadata,
-            }
-          );
+          ],
+          collection: {
+            key: umiCollectionMint,
+            verified: false,
+          },
+        };
 
-          const transaction = {
-            version: 0,
-            payer: this.payer.publicKey,
-            instructions: [mintIx],
-            recentBlockhash: blockhash.blockhash,
-          } as const;
+        // Mint cNFT with Soulbound logic
+        // CRITICAL: leaf_delegate = Program PDA (prevents transfer)
+        console.log(`Minting credential for ${student.name} (${student.email})...`);
+        
+        const builder = await mintV1(this.umi, {
+          leafOwner: studentWallet,
+          leafDelegate: umiProgramAuthority, // SOULBOUND: Program PDA
+          merkleTree: umiMerkleTree,
+          metadata: metadata,
+        });
 
-          const signedTransaction = await signTransaction(transaction, [this.payer]);
-          const signature = await rpc.sendTransaction(signedTransaction).send();
-          */
-
-          // MVP: Return mock transaction
-          const mockTx = `mockTx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          console.log(`(MOCK) Mint credential for ${student.name} (${student.email}) -> ${student.wallet}`);
-          console.log(`(MOCK) Transaction: ${mockTx}`);
-          
-          results.push({
-            student: student.email || student.name,
-            tx: mockTx,
-          });
-        } catch (error: any) {
-          console.error(`Failed to mint for ${student.name}:`, error);
-          results.push({
-            student: student.email || student.name,
-            error: error.message || 'Unknown error',
-          });
-        }
+        const result = await builder.sendAndConfirm(this.umi);
+        
+        console.log(`✅ Minted credential for ${student.name}`);
+        console.log(`   Transaction: ${result.signature}`);
+        
+        results.push({
+          student: student.email || student.name,
+          tx: result.signature,
+        });
+      } catch (error: any) {
+        console.error(`❌ Failed to mint for ${student.name}:`, error.message);
+        results.push({
+          student: student.email || student.name,
+          error: error.message || 'Unknown error',
+        });
       }
-
-      console.log(`Minting complete. ${results.filter(r => r.tx).length}/${students.length} successful.`);
-      return { success: true, results };
-    } catch (error: any) {
-      console.error('Batch mint failed:', error);
-      return { success: false, results };
     }
+
+    const successful = results.filter(r => r.tx).length;
+    const failed = results.filter(r => r.error).length;
+    
+    console.log(`\n📊 Minting Summary:`);
+    console.log(`   Successful: ${successful}/${students.length}`);
+    console.log(`   Failed: ${failed}/${students.length}`);
+
+    return { 
+      success: successful > 0, 
+      results 
+    };
   }
 }
 
-// Example execution
-(async () => {
-  try {
-    const admin = new AdminService();
-    
-    // Initialize payer
-    await admin.initializePayer();
+// Export for use in API routes
+export default AdminService;
 
-    // 1. Create Collection (or get existing)
-    const collectionMint = await admin.createCollection();
+// Example execution (if run directly)
+if (require.main === module) {
+  (async () => {
+    try {
+      const admin = new AdminService();
+      
+      // Get configuration from environment
+      const merkleTree = process.env.MERKLE_TREE;
+      const collectionMint = process.env.COLLECTION_MINT;
+      
+      if (!merkleTree || !collectionMint) {
+        throw new Error('MERKLE_TREE and COLLECTION_MINT must be set in .env.local');
+      }
 
-    // 2. Create Tree
-    const merkleTree = await admin.createMerkleTree();
+      // Example student list
+      const studentList: Student[] = [
+        { 
+          name: 'Alice Nguyen', 
+          wallet: '11111111111111111111111111111111', // Replace with real wallet
+          email: 'alice@apec.edu.vn',
+          major: 'Entrepreneurship',
+          issue_date: new Date().toISOString().split('T')[0],
+        },
+      ];
 
-    // 3. Batch Mint
-    const studentList: Student[] = [
-      { 
-        name: 'Alice Nguyen', 
-        wallet: '11111111111111111111111111111111',
-        email: 'alice@apec.edu.vn',
-        major: 'Entrepreneurship',
-        issue_date: new Date().toISOString().split('T')[0],
-      },
-    ];
-
-    const result = await admin.batchMintCredentials(merkleTree, collectionMint, studentList);
-    console.log('Final result:', result);
-  } catch (error) {
-    console.error('Admin script error:', error);
-    process.exit(1);
-  }
-})();
+      const result = await admin.batchMintCredentials(merkleTree, collectionMint, studentList);
+      console.log('Final result:', result);
+    } catch (error) {
+      console.error('Admin script error:', error);
+      process.exit(1);
+    }
+  })();
+}

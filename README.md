@@ -93,13 +93,54 @@ PAYER_SECRET_KEY=[1,2,3,...] # JSON array of secret key bytes
 NEXT_PUBLIC_DEMO_MODE=false
 ```
 
-### 3. Build Anchor Program
+### 3. Initialize Merkle Tree and Collection
 
+**Create Merkle Tree:**
+```bash
+npx ts-node scripts/init-tree.ts
+```
+This will create a Merkle Tree with `max_depth=14` and `max_buffer_size=64`.
+Copy the `MERKLE_TREE` address to your `.env.local`.
+
+**Create Collection NFT:**
+```bash
+npx ts-node scripts/create-collection.ts
+```
+Copy the `COLLECTION_MINT` address to your `.env.local`.
+
+### 4. Build and Deploy Anchor Program
+
+**Build:**
 ```bash
 anchor build
 ```
 
-### 4. Run Development Server
+**Deploy to Devnet:**
+```bash
+anchor deploy --provider.cluster devnet
+```
+
+Hoặc sử dụng script:
+```bash
+# Windows
+.\scripts\build-and-deploy.ps1
+
+# Linux/Mac
+./scripts/build-and-deploy.sh
+```
+
+Sau khi deploy, verify Program ID trên [Solana Explorer](https://explorer.solana.com/?cluster=devnet).
+
+**Chạy Unit Tests:**
+```bash
+anchor test --provider.cluster devnet
+# hoặc
+npm run anchor:test
+```
+
+Xem chi tiết trong [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+### 5. Run Development Server
 
 ```bash
 npm run dev
@@ -156,34 +197,53 @@ The `adminMint.ts` script handles:
 
 ## Important Notes
 
-### Web3.js v2 Compatibility
+### Soulbound Logic
 
-This project uses `@solana/web3.js` v2 which has breaking changes:
-- New RPC API (`createSolanaRpc`)
-- Different transaction structure
-- Some imports may need adjustment
+**CRITICAL:** All credentials are minted with `leaf_delegate` set to Program PDA.
+This prevents students from transferring their credentials (Soulbound).
 
-If you encounter TypeScript errors with Keypair/PublicKey imports, you may need to:
-- Use dynamic imports: `const { Keypair } = await import('@solana/web3.js')`
-- Or install `@solana/web3.js-legacy-compat` for compatibility
+- When minting: `leaf_delegate` = Program PDA (derived from `[b"authority"]`)
+- Transfer attempts will be rejected if `leaf_delegate` = Program PDA
+- Only Program Authority (admin) can transfer Soulbound credentials
 
-### MVP Limitations
+### Merkle Tree Configuration
 
-- Admin mint script uses mock transactions for MVP
-- Full Bubblegum integration requires additional setup
-- Wallet mapping service needs database schema update
+- **Max Depth:** 14 (supports ~16,384 credentials)
+- **Max Buffer Size:** 64 (optimized for hackathon)
+- **Tree Authority:** Program PDA (for governance)
+
+### Dependencies
+
+- Uses `@metaplex-foundation/mpl-bubblegum@^5.0.2` (requires UMI framework)
+- Uses `@solana/web3.js@^1.98.4` (v1 API)
+- Uses `@coral-xyz/anchor@^0.32.1`
+
+### Tuần 1 - Hạ tầng & Smart Contract ✅
+
+**Đã hoàn thành:**
+- ✅ Merkle Tree initialization script với `max_depth=14, max_buffer_size=64`
+- ✅ Collection NFT creation script
+- ✅ Smart Contract với logic Soulbound (leaf_delegate = Program PDA)
+- ✅ Admin minting service sử dụng Bubblegum SDK thực sự
+- ✅ API route tích hợp với minting service
+- ✅ Unit tests với test cases thực sự (PDA derivation, Soulbound logic)
+- ✅ Build và deploy scripts
+
+**Để hoàn thiện:**
+- [ ] Build và deploy Anchor program lên Devnet (chạy `anchor build && anchor deploy`)
+- [ ] Verify CPI calls trong Smart Contract hoạt động đúng (sau khi deploy)
+- [ ] Test end-to-end minting flow với Smart Contract
 
 ### Production Checklist
 
-- [ ] Implement real Bubblegum minting in `adminMint.ts`
 - [ ] Add `wallet_address` column to Supabase `profiles` table
 - [ ] Set up proper wallet-as-a-service (Web3Auth, Privy, etc.)
-- [ ] Implement Merkle proof verification on-chain
+- [ ] Implement Merkle proof verification on-chain (full implementation)
 - [ ] Add metadata storage (Arweave/IPFS)
-- [ ] Set up collection NFT creation workflow
 - [ ] Add proper error handling and logging
 - [ ] Implement rate limiting for API routes
 - [ ] Add admin authentication middleware
+- [ ] Complete CPI implementation in Smart Contract
 
 ## Contributing
 

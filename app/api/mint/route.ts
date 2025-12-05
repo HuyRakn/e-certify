@@ -46,10 +46,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Import and use admin service
-    // Note: For MVP, we'll use a simplified approach
-    // In production, you would import from ts/adminMint.ts or use a proper service
-    // For now, we'll return mock results with proper structure
-    // TODO: Implement real minting logic using Bubblegum SDK
+    const AdminService = (await import('../../../ts/adminMint')).default;
+    const admin = new AdminService();
 
     // Transform CSV rows to Student format
     const students = payload.rows.map((row) => ({
@@ -60,33 +58,33 @@ export async function POST(req: NextRequest) {
       issue_date: row.issue_date,
     }));
 
-    // TODO: Look up wallet addresses for students without wallet addresses
-    // This requires a wallet mapping service (email -> wallet)
-    // For MVP, we'll generate mock transaction IDs
-    // In production, this would call the actual minting service
+    // Validate all students have wallet addresses
+    const studentsWithoutWallet = students.filter(s => !s.wallet);
+    if (studentsWithoutWallet.length > 0) {
+      return NextResponse.json(
+        { 
+          error: `Missing wallet addresses for ${studentsWithoutWallet.length} student(s)`,
+          students: studentsWithoutWallet.map(s => s.email || s.name),
+        },
+        { status: 400 }
+      );
+    }
 
-    const results: Array<{ student: string; tx?: string; error?: string }> = students.map((student, index) => {
-      // For MVP: Return mock transaction
-      // In production: Call actual minting service
-      const mockTx = `mockTx_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 9)}`;
-      return {
-        student: student.email || student.name,
-        tx: mockTx,
-      };
-    });
-
-    const successful = results.filter(r => r.tx).length;
-    const failed = results.filter(r => r.error).length;
+    // Call real minting service
+    const result = await admin.batchMintCredentials(
+      merkleTree,
+      collectionMint,
+      students
+    );
 
     return NextResponse.json({
-      ok: true,
-      count: results.length,
-      successful,
-      failed,
-      results,
+      ok: result.success,
+      count: result.results.length,
+      successful: result.results.filter(r => r.tx).length,
+      failed: result.results.filter(r => r.error).length,
+      results: result.results,
       collectionMint,
       merkleTree,
-      note: 'This is a mock implementation. Connect real minting service for production.',
     });
   } catch (e: any) {
     console.error('Mint API error:', e);

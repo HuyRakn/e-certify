@@ -1,14 +1,18 @@
+[programs.devnet]
+credify_program = "CRD111111111111111111111111111111111111111"
+
 [programs.localnet]
 credify_program = "CRD111111111111111111111111111111111111111"
 
 [registry]
-url = "https://anchor.projectserum.com"
+url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
+# wallet will be loaded from environment or default location
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "node --version"
+test = "anchor test --skip-local-validator"
 
 

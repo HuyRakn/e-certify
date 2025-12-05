@@ -17,5 +17,6 @@ anchor-lang = "=0.32.1"
 spl-account-compression = "^0.2.0"
 mpl-bubblegum = "^2.1.1"
 solana-program = "1.18.26"
+spl-token = "4.0"
 
 
