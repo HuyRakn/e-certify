@@ -34,17 +34,31 @@ export default function SkillsPassportPage() {
 
       setLoading(true);
       try {
-        const response = await fetch(`/api/cnft?owner=${publicKey.toBase58()}`);
+        // Get collection mint from env (for filtering)
+        const collectionMint = process.env.NEXT_PUBLIC_APEC_COLLECTION || '';
+        const apiUrl = collectionMint 
+          ? `/api/cnft?owner=${publicKey.toBase58()}&collection=${collectionMint}`
+          : `/api/cnft?owner=${publicKey.toBase58()}`;
+        
+        const response = await fetch(apiUrl);
         
         // Even if response is not ok, try to parse JSON (demo mode might return 200 with demo data)
         const data = await response.json();
         
         // DAS API returns items in 'items' array
-        const items = Array.isArray(data?.items)
+        let items = Array.isArray(data?.items)
           ? data.items
           : Array.isArray(data)
           ? data
           : [];
+        
+        // Additional frontend filtering (backup)
+        if (collectionMint && items.length > 0) {
+          items = items.filter((item: ICertificate) => {
+            const collection = item.grouping?.find(g => g.group_key === 'collection' || g.group_key === 'Collection');
+            return collection?.group_value === collectionMint;
+          });
+        }
         
         // If we have items, use them (even if from demo mode)
         if (items.length > 0) {
@@ -150,9 +164,16 @@ export default function SkillsPassportPage() {
         {connected && !loading && certificates.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-soft-text">
-                Found <span className="text-brand font-semibold">{certificates.length}</span> certificate{certificates.length !== 1 ? 's' : ''}
-              </p>
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-soft-text">
+                  Found <span className="text-brand font-semibold">{certificates.length}</span> certificate{certificates.length !== 1 ? 's' : ''}
+                </p>
+                {process.env.NEXT_PUBLIC_APEC_COLLECTION && (
+                  <p className="text-xs text-soft-text-muted">
+                    Filtered by APEC Collection (spam NFTs excluded)
+                  </p>
+                )}
+              </div>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
               {certificates.map((cert, index) => (

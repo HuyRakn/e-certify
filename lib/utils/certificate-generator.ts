@@ -6,6 +6,7 @@
 
 import satori from 'satori';
 import { StudentCertificateData } from '../types/metadata';
+import { loadFontForSatori } from './font-loader';
 
 // Certificate dimensions
 const CERTIFICATE_WIDTH = 1200;
@@ -20,9 +21,8 @@ const CERTIFICATE_HEIGHT = 800;
 export async function generateCertificateImage(
   studentData: StudentCertificateData
 ): Promise<Buffer> {
-  // Load fonts (using system fonts for now, can be replaced with custom fonts)
-  // For production, you might want to load custom fonts from files
-  const fontData = await loadFont();
+  // Load fonts from CDN or local files
+  const fontData = await loadFontForSatori();
   
   // Generate SVG using satori
   const svg = await satori(
@@ -38,7 +38,7 @@ export async function generateCertificateImage(
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           padding: '60px',
-          fontFamily: 'Inter, system-ui, sans-serif',
+          fontFamily: fontData.name || 'Inter, Roboto, system-ui, sans-serif',
         },
         children: [
           // Header
@@ -187,17 +187,6 @@ export async function generateCertificateImage(
   return pngBuffer;
 }
 
-/**
- * Load font data (using system fonts for now)
- * For production, load custom fonts from files
- */
-async function loadFont(): Promise<{ name: string; data: ArrayBuffer; weight?: number; style?: string } | null> {
-  // For now, return null to use system fonts
-  // To use custom fonts, you would do:
-  // const fontData = await fetch('path/to/font.ttf').then(r => r.arrayBuffer());
-  // return { name: 'Inter', data: fontData, weight: 400 };
-  return null;
-}
 
 /**
  * Format date string

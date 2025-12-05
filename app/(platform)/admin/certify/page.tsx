@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Upload, FileText, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { Upload, FileText, CheckCircle2, XCircle, Loader2, Wallet, AlertCircle } from "lucide-react";
 import Papa from "papaparse";
+import { WalletIndicator } from "@/app/components/wallet-indicator";
+import { Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { verifyProgramPDA } from "@/lib/utils/soulbound-verification";
 
 type CsvRow = {
   student_email: string;
@@ -29,6 +33,11 @@ type StudentStatus = {
 };
 
 export default function CertifyPage() {
+  // Wallet integration
+  const { publicKey, connected, connecting, disconnect } = useWallet();
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
+  const [balanceLoading, setBalanceLoading] = useState(false);
+
   const [collectionMint, setCollectionMint] = useState(process.env.NEXT_PUBLIC_APEC_COLLECTION || "");
   const [merkleTree, setMerkleTree] = useState(process.env.MERKLE_TREE || "");
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -38,6 +47,40 @@ export default function CertifyPage() {
   const [results, setResults] = useState<MintResult[]>([]);
   const [studentStatuses, setStudentStatuses] = useState<StudentStatus[]>([]);
   const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [soulboundConfirmed, setSoulboundConfirmed] = useState(false);
+
+  // Verify Program PDA on mount
+  useEffect(() => {
+    const pdaInfo = verifyProgramPDA();
+    console.log('Program Authority PDA:', pdaInfo.pda);
+  }, []);
+
+  // Fetch wallet balance
+  useEffect(() => {
+    const fetchBalance = async () => {
+      if (!connected || !publicKey) {
+        setWalletBalance(null);
+        return;
+      }
+
+      setBalanceLoading(true);
+      try {
+        const rpcUrl = process.env.NEXT_PUBLIC_HELIUS_API_KEY_URL || 
+                      process.env.NEXT_PUBLIC_SOLANA_RPC_URL ||
+                      'https://api.devnet.solana.com';
+        const connection = new Connection(rpcUrl, 'confirmed');
+        const balance = await connection.getBalance(publicKey);
+        setWalletBalance(balance / LAMPORTS_PER_SOL);
+      } catch (error) {
+        console.error('Failed to fetch balance:', error);
+        setWalletBalance(null);
+      } finally {
+        setBalanceLoading(false);
+      }
+    };
+
+    fetchBalance();
+  }, [connected, publicKey]);
 
   const parseCSV = (file: File): Promise<CsvRow[]> => {
     return new Promise((resolve, reject) => {
@@ -111,6 +154,18 @@ export default function CertifyPage() {
   };
 
   const runBatchMint = async () => {
+    // Check wallet connection
+    if (!connected || !publicKey) {
+      setStatus("Please connect your wallet first.");
+      return;
+    }
+
+    // Check wallet balance
+    if (walletBalance !== null && walletBalance < 0.1) {
+      setStatus(`Insufficient balance: ${walletBalance.toFixed(4)} SOL. Please ensure you have at least 0.1 SOL for transaction fees.`);
+      return;
+    }
+
     if (!collectionMint || !merkleTree) {
       setStatus("Please provide Collection Mint and Merkle Tree addresses.");
       return;
@@ -118,6 +173,11 @@ export default function CertifyPage() {
 
     if (csvData.length === 0) {
       setStatus("Please upload a CSV file with student data.");
+      return;
+    }
+
+    if (!soulboundConfirmed) {
+      setStatus("Please confirm that you understand credentials will be Soulbound.");
       return;
     }
 
@@ -226,6 +286,77 @@ export default function CertifyPage() {
         </p>
       </div>
 
+      {/* Wallet Connection Card */}
+      {!connected && (
+        <Card className="border-orange-200 bg-orange-50/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-orange-900">
+              <Wallet className="h-5 w-5" />
+              Wallet Connection Required
+            </CardTitle>
+            <CardDescription className="text-orange-700">
+              Please connect your Solana wallet to mint certificates
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center gap-4 py-4">
+              <WalletIndicator />
+              <p className="text-sm text-orange-700 text-center">
+                Connect your wallet (Phantom, Solflare, etc.) to proceed with batch minting
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Wallet Info Card */}
+      {connected && publicKey && (
+        <Card className="border-green-200 bg-green-50/50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-green-900">
+              <CheckCircle2 className="h-5 w-5" />
+              Wallet Connected
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-green-900">Wallet Address:</span>
+                <span className="text-sm font-mono text-green-700">
+                  {publicKey.toBase58().slice(0, 8)}...{publicKey.toBase58().slice(-8)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-green-900">Balance:</span>
+                <span className="text-sm font-semibold text-green-700">
+                  {balanceLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin inline" />
+                  ) : walletBalance !== null ? (
+                    `${walletBalance.toFixed(4)} SOL`
+                  ) : (
+                    'N/A'
+                  )}
+                </span>
+              </div>
+              {walletBalance !== null && walletBalance < 0.1 && (
+                <div className="flex items-center gap-2 text-sm text-orange-700 bg-orange-100 p-2 rounded">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>Low balance. You may need more SOL for transaction fees.</span>
+                </div>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => disconnect()}
+                className="w-full mt-2"
+              >
+                Disconnect Wallet
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="grid gap-6 md:grid-cols-2">
         {/* Configuration Card */}
         <Card>
@@ -258,6 +389,41 @@ export default function CertifyPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Soulbound Confirmation Card */}
+        {connected && (
+          <Card className="border-blue-200 bg-blue-50/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-blue-900 text-sm">
+                <ShieldCheck className="h-4 w-4" />
+                Soulbound Protection
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="text-xs text-blue-800 space-y-2">
+                <p>
+                  All credentials will be minted with <strong>Soulbound</strong> protection.
+                  Students will <strong>NOT</strong> be able to transfer their credentials.
+                </p>
+                <p className="font-mono text-[10px] bg-blue-100 p-2 rounded">
+                  Program Authority PDA: {verifyProgramPDA().pda.slice(0, 16)}...
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="soulbound-confirm"
+                  checked={soulboundConfirmed}
+                  onChange={(e) => setSoulboundConfirmed(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                <label htmlFor="soulbound-confirm" className="text-xs text-blue-800 cursor-pointer">
+                  I understand credentials will be Soulbound (non-transferable)
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* CSV Upload Card */}
         <Card>
@@ -439,7 +605,7 @@ export default function CertifyPage() {
       <div className="flex justify-end">
         <Button
           onClick={runBatchMint}
-          disabled={!collectionMint || !merkleTree || csvData.length === 0 || loading}
+          disabled={!connected || !soulboundConfirmed || !collectionMint || !merkleTree || csvData.length === 0 || loading}
           size="lg"
         >
           {loading ? (

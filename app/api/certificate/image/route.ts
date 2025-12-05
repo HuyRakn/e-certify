@@ -62,17 +62,25 @@ export async function GET(req: NextRequest) {
   };
 
   try {
+    console.log('Generating certificate image for:', { name: studentData.name, major: studentData.major });
+    
     const imageBuffer = await generateCertificateImage(studentData);
+    
+    console.log('Certificate image generated successfully, size:', imageBuffer.length, 'bytes');
     
     return new NextResponse(imageBuffer, {
       headers: {
         'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=3600',
       },
     });
   } catch (error: any) {
     console.error('Certificate image generation error:', error);
     return NextResponse.json(
-      { error: error?.message || 'Failed to generate certificate image' },
+      { 
+        error: error?.message || 'Failed to generate certificate image',
+        hint: error?.message?.includes('font') ? 'Make sure you have internet connection to load fonts from Google Fonts' : undefined
+      },
       { status: 500 }
     );
   }

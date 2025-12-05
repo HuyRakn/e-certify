@@ -12,7 +12,9 @@
   "anchor:test": "anchor test --provider.cluster devnet",
   "anchor:gen-client": "npm run anchor:build && npx codama run js --config ./codama.js",
   "admin:mint": "ts-node ts/adminMint.ts",
-  "test:tuan2": "ts-node scripts/test-tuan2.ts"
+  "test:tuan2": "ts-node scripts/test-tuan2.ts",
+  "test:tuan3": "ts-node scripts/test-tuan3.ts",
+  "download-font": "node scripts/download-font.js"
  },
  "dependencies": {
   "@coral-xyz/anchor": "^0.32.1",

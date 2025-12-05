@@ -258,6 +258,33 @@ This prevents students from transferring their credentials (Soulbound).
 - [ ] Verify Arweave URLs accessible
 - [ ] Verify metadata hiển thị đúng trên NFT viewers
 
+### Tuần 3 - Minting Process & Soulbound Logic ✅
+
+**Đã hoàn thành:**
+- ✅ Frontend wallet integration cho Admin (Teacher) minting
+- ✅ Batch minting service với TransactionBuilder (gom nhiều mints vào transactions)
+- ✅ Error handling và retry logic với exponential backoff
+- ✅ Soulbound enforcement verification (leaf_delegate = Program PDA)
+- ✅ Student passport view với collection filtering
+- ✅ Spam NFT filtering (chỉ hiển thị credentials trong APEC collection)
+- ✅ UI/UX enhancements (wallet UI, progress tracking, error states)
+
+**Files mới:**
+- `lib/services/batch-mint-service.ts` - Batch minting với TransactionBuilder
+- `lib/utils/retry-utils.ts` - Retry logic với exponential backoff
+- `lib/utils/soulbound-verification.ts` - Soulbound verification utilities
+
+**Files đã cập nhật:**
+- `app/(platform)/admin/certify/page.tsx` - Wallet integration và UI enhancements
+- `app/api/cnft/route.ts` - Collection filtering
+- `app/(platform)/passport/page.tsx` - Collection filtering trong frontend
+
+**Để test:**
+- [ ] Test wallet connection và minting với real wallet
+- [ ] Verify transaction signatures trên Solana Explorer
+- [ ] Verify collection filtering với real data
+- [ ] Test retry logic với network errors
+
 ### Production Checklist
 
 - [ ] Add `wallet_address` column to Supabase `profiles` table
