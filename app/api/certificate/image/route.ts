@@ -34,7 +34,8 @@ export async function POST(req: NextRequest) {
     const imageBuffer = await generateCertificateImage(studentData);
 
     // Return as PNG
-    return new NextResponse(imageBuffer, {
+    // Buffer is Node-specific; cast to BodyInit to satisfy NextResponse typing
+    return new NextResponse(imageBuffer as unknown as BodyInit, {
       headers: {
         'Content-Type': 'image/png',
         'Content-Disposition': `inline; filename="certificate-${studentData.name.replace(/\s+/g, '-')}.png"`,
@@ -58,7 +59,7 @@ export async function GET(req: NextRequest) {
     email: searchParams.get('email') || 'john@example.com',
     major: searchParams.get('major') || 'Computer Science',
     issueDate: searchParams.get('issueDate') || new Date().toISOString().split('T')[0],
-    certificateId: searchParams.get('certificateId'),
+    certificateId: searchParams.get('certificateId') || undefined,
   };
 
   try {
@@ -68,7 +69,7 @@ export async function GET(req: NextRequest) {
     
     console.log('Certificate image generated successfully, size:', imageBuffer.length, 'bytes');
     
-    return new NextResponse(imageBuffer, {
+    return new NextResponse(imageBuffer as unknown as BodyInit, {
       headers: {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=3600',

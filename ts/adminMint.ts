@@ -119,7 +119,7 @@ class AdminService {
         const studentData: StudentCertificateData = {
           name: student.name,
           email: student.email || '',
-          major: student.major,
+          major: student.major || '',
           issueDate: student.issue_date || new Date().toISOString().split('T')[0],
           certificateId: `APEC-${student.email?.split('@')[0] || student.name.replace(/\s+/g, '-')}-${Date.now()}`,
         };
@@ -178,7 +178,7 @@ class AdminService {
         
         results.push({
           student: student.email || student.name,
-          tx: result.signature,
+          tx: String(result.signature),
         });
       } catch (error: any) {
         console.error(`❌ Failed to mint for ${student.name}:`, error.message);

@@ -5,6 +5,7 @@
  */
 
 import satori from 'satori';
+import { ReactNode } from 'react';
 import { StudentCertificateData } from '../types/metadata';
 import { loadFontForSatori } from './font-loader';
 
@@ -170,11 +171,11 @@ export async function generateCertificateImage(
           },
         ],
       },
-    },
+    } as unknown as ReactNode,
     {
       width: CERTIFICATE_WIDTH,
       height: CERTIFICATE_HEIGHT,
-      fonts: fontData ? [fontData] : [],
+      fonts: fontData ? [fontData as unknown as any] : [],
     }
   );
 

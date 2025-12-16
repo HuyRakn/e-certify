@@ -53,9 +53,10 @@ export function buildMetaplexMetadata(
   // Add additional info as attributes
   if (studentData.additionalInfo) {
     Object.entries(studentData.additionalInfo).forEach(([key, value]) => {
+      const normalizedValue = value === null || value === undefined ? '' : String(value);
       attributes.push({
         trait_type: key,
-        value: value,
+        value: normalizedValue,
       });
     });
   }

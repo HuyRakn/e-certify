@@ -71,11 +71,8 @@ export async function uploadImage(
   try {
     const irys = await getIrysInstance();
     
-    // Convert buffer to Uint8Array
-    const data = new Uint8Array(buffer);
-    
-    // Upload with tags
-    const receipt = await irys.upload(data, {
+    // Upload with tags (Irys expects Buffer/string/Readable)
+    const receipt = await irys.upload(Buffer.from(buffer), {
       tags: [
         { name: 'Content-Type', value: 'image/png' },
         { name: 'App-Name', value: 'APEC-Credify' },
@@ -111,10 +108,9 @@ export async function uploadMetadata(
     // Stringify metadata
     const data = JSON.stringify(metadata, null, 2);
     const buffer = Buffer.from(data, 'utf-8');
-    const uint8Array = new Uint8Array(buffer);
     
     // Upload with tags
-    const receipt = await irys.upload(uint8Array, {
+    const receipt = await irys.upload(buffer, {
       tags: [
         { name: 'Content-Type', value: 'application/json' },
         { name: 'App-Name', value: 'APEC-Credify' },
@@ -147,7 +143,7 @@ export async function uploadBatch(
   
   // Prepare uploads
   const uploads = items.map((item) => {
-    const data = new Uint8Array(item.buffer);
+    const data = Buffer.from(item.buffer);
     const tags = [
       { name: 'Content-Type', value: item.type === 'image' ? 'image/png' : 'application/json' },
       { name: 'App-Name', value: 'APEC-Credify' },
@@ -162,8 +158,10 @@ export async function uploadBatch(
     return { data, tags };
   });
   
-  // Upload batch
-  const receipts = await irys.uploader.uploadBatch(uploads);
+  // Upload batch (parallel) since NodeUploader.uploadBatch may be unavailable
+  const receipts = await Promise.all(
+    uploads.map(({ data, tags }) => irys.upload(data, { tags }))
+  );
   
   // Return URLs
   return receipts.map((receipt) => `https://arweave.net/${receipt.id}`);

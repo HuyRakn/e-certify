@@ -5,7 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Upload, FileText, CheckCircle2, XCircle, Loader2, Wallet, AlertCircle } from "lucide-react";
+import { Upload, FileText, CheckCircle2, XCircle, Loader2, Wallet, AlertCircle, ShieldCheck } from "lucide-react";
 import Papa from "papaparse";
 import { WalletIndicator } from "@/app/components/wallet-indicator";
 import { Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
