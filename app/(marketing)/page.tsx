@@ -409,7 +409,7 @@ export default function HomePage() {
 						>
 							The New Standard
 							<br />
-							for <span className="text-brand text-[2.4rem] md:text-[3.5rem] lg:text-[4.2rem] whitespace-nowrap">Verified Skills</span>
+							for <span className="text-[var(--brand-primary)] text-[2.4rem] md:text-[3.5rem] lg:text-[4.2rem] whitespace-nowrap">Verified Skills</span>
 						</motion.h1>
 
 						<motion.p

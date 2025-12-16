@@ -12,8 +12,12 @@
   "anchor:test": "anchor test --provider.cluster devnet",
   "anchor:gen-client": "npm run anchor:build && npx codama run js --config ./codama.js",
   "admin:mint": "ts-node ts/adminMint.ts",
-  "test:tuan2": "ts-node scripts/test-tuan2.ts",
-  "test:tuan3": "ts-node scripts/test-tuan3.ts",
+  "test:week1": "node scripts/test-week1.js",
+  "test:week2": "node scripts/test-week2.js",
+  "test:week3": "node scripts/test-week3.js",
+  "test:week4": "node scripts/test-week4.js",
+  "test:week5": "node scripts/test-week5.js",
+  "test:weeks": "npm run test:week1 && npm run test:week2 && npm run test:week3 && npm run test:week4 && npm run test:week5",
   "download-font": "node scripts/download-font.js"
  },
  "dependencies": {
